@@ -60,6 +60,7 @@ ENV \
     STASH_CONFIG_FILE=/config/config.yml
 COPY --from=backend /stash/stash /usr/bin/
 COPY --from=source /jellyfin-ffmpeg6_6.0.1-7-jammy_amd64.deb /run/jellyfin-ffmpeg6_6.0.1-7-jammy_amd64.deb
+COPY ./apps/stash-cuda/config.yaml /config/config.yaml
 RUN \
     (dpkg -i /run/jellyfin-ffmpeg6_6.0.1-7-jammy_amd64.deb || true) \
     && apt-get update \
