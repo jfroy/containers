@@ -1,0 +1,97 @@
+diff --git a/pkg/ffmpeg/stream_transcode.go b/pkg/ffmpeg/stream_transcode.go
+index ce56e079..6239384f 100644
+--- a/pkg/ffmpeg/stream_transcode.go
++++ b/pkg/ffmpeg/stream_transcode.go
+@@ -15,7 +15,7 @@ import (
+
+ type StreamFormat struct {
+ 	MimeType string
+-	Args     func(codec VideoCodec, videoFilter VideoFilter, videoOnly bool) Args
++	Args     func(codec VideoCodec, videoFilter VideoFilter, acodec ProbeAudioCodec) Args
+ }
+
+ func CodecInit(codec VideoCodec) (args Args) {
+@@ -42,8 +42,22 @@ func CodecInit(codec VideoCodec) (args Args) {
+ 	// HW Codecs
+ 	case VideoCodecN264:
+ 		args = append(args,
+-			"-rc", "vbr",
+-			"-cq", "15",
++			// https://docs.nvidia.com/video-technologies/video-codec-sdk/12.0/ffmpeg-with-nvidia-gpu/index.html#command-line-for-low-latency-transcoding
++			// ffmpeg -y -vsync 0 -hwaccel cuda -hwaccel_output_format cuda -i input.mp4 -c:a copy -c:v h264_nvenc -preset p6 -tune ll -b:v 5M -bufsize 5M -maxrate 10M -qmin 0 -g 250 -bf 3 -b_ref_mode middle -temporal-aq 1 -rc-lookahead 20 -i_qfactor 0.75 -b_qfactor 1.1 output.mp4
++			"-preset", "p6",
++			"-tune", "ll",
++			"-b:v", "10M",
++			"-bufsize", "5M",
++			"-maxrate", "15M",
++			"-qmin", "0",
++			"-g", "250",
++			"-bf", "3",
++			"-b_ref_mode", "middle",
++			"-temporal-aq", "1",
++			"-rc-lookahead", "20",
++			"-i_qfactor", "0.75",
++			"-b_qfactor", "1.1",
++			"-fps_mode", "passthrough",
+ 		)
+ 	case VideoCodecI264:
+ 		args = append(args,
+@@ -84,13 +98,16 @@ func CodecInit(codec VideoCodec) (args Args) {
+ var (
+ 	StreamTypeMP4 = StreamFormat{
+ 		MimeType: MimeMp4Video,
+-		Args: func(codec VideoCodec, videoFilter VideoFilter, videoOnly bool) (args Args) {
++		Args: func(codec VideoCodec, videoFilter VideoFilter, acodec ProbeAudioCodec) (args Args) {
+ 			args = CodecInit(codec)
+ 			args = append(args, "-movflags", "frag_keyframe+empty_moov")
+ 			args = args.VideoFilter(videoFilter)
+-			if videoOnly {
++			switch acodec {
++			case Aac:
++				args = append(args, "-c:a", "copy")
++			case MissingUnsupported:
+ 				args = args.SkipAudio()
+-			} else {
++			default:
+ 				args = append(args, "-ac", "2")
+ 			}
+ 			args = args.Format(FormatMP4)
+@@ -99,10 +116,10 @@ var (
+ 	}
+ 	StreamTypeWEBM = StreamFormat{
+ 		MimeType: MimeWebmVideo,
+-		Args: func(codec VideoCodec, videoFilter VideoFilter, videoOnly bool) (args Args) {
++		Args: func(codec VideoCodec, videoFilter VideoFilter, acodec ProbeAudioCodec) (args Args) {
+ 			args = CodecInit(codec)
+ 			args = args.VideoFilter(videoFilter)
+-			if videoOnly {
++			if acodec == MissingUnsupported {
+ 				args = args.SkipAudio()
+ 			} else {
+ 				args = append(args, "-ac", "2")
+@@ -113,9 +130,9 @@ var (
+ 	}
+ 	StreamTypeMKV = StreamFormat{
+ 		MimeType: MimeMkvVideo,
+-		Args: func(codec VideoCodec, videoFilter VideoFilter, videoOnly bool) (args Args) {
++		Args: func(codec VideoCodec, videoFilter VideoFilter, acodec ProbeAudioCodec) (args Args) {
+ 			args = CodecInit(codec)
+-			if videoOnly {
++			if acodec == MissingUnsupported {
+ 				args = args.SkipAudio()
+ 			} else {
+ 				args = args.AudioCodec(AudioCodecLibOpus)
+@@ -196,11 +213,11 @@ func (o TranscodeOptions) makeStreamArgs(sm *StreamManager) Args {
+
+ 	args = args.Input(o.VideoFile.Path)
+
+-	videoOnly := ProbeAudioCodec(o.VideoFile.AudioCodec) == MissingUnsupported
++	acodec := ProbeAudioCodec(o.VideoFile.AudioCodec)
+
+ 	videoFilter := sm.encoder.hwMaxResFilter(codec, o.VideoFile.Width, o.VideoFile.Height, maxTranscodeSize, fullhw)
+
+-	args = append(args, o.StreamType.Args(codec, videoFilter, videoOnly)...)
++	args = append(args, o.StreamType.Args(codec, videoFilter, acodec)...)
+
+ 	args = append(args, extraOutputArgs...)
+
