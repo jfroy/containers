@@ -70,7 +70,8 @@ RUN \
     && pip install uv \
     && uv pip install --system stashapp-tools \
     && groupadd -g 1000 ubuntu \
-    && useradd -g 1000 -u 1000 ubuntu
+    && useradd -g 1000 -u 1000 ubuntu \
+    && touch /.dockerenv
 EXPOSE 9999
 ENTRYPOINT ["/usr/bin/stash"]
 
