@@ -9,8 +9,8 @@ ENV UMASK="0002" \
 
 USER root
 
-RUN \
-    apk add --no-cache curl git patch \
+RUN true \
+    && apk add --no-cache curl git patch \
     && git clone --depth 1 --branch "v${VERSION}" https://github.com/stashapp/stash /src \
     && curl -sLO https://github.com/jellyfin/jellyfin-ffmpeg/releases/download/v6.0.1-7/jellyfin-ffmpeg6_6.0.1-7-jammy_amd64.deb
 COPY ./apps/stash-cuda/jellyfin-cuda.patch /src/
@@ -20,28 +20,22 @@ RUN patch -p1 < jellyfin-cuda.patch
 # Frontend
 FROM node:alpine as frontend
 RUN apk add --no-cache make git
-## cache node_modules separately
-COPY --from=source /src/ui/v2.5/package.json /src/ui/v2.5/yarn.lock /stash/ui/v2.5/
-COPY --from=source /src/Makefile /stash/
-COPY --from=source /src/graphql /stash/graphql/
-COPY --from=source /src/ui /stash/ui/
+COPY --from=source /src /stash
 WORKDIR /stash
-RUN make pre-ui
-RUN make generate-ui
-RUN BUILD_DATE=$(date +"%Y-%m-%d %H:%M:%S") STASH_VERSION=${VERSION} make ui
+RUN true \
+    && export STASH_VERSION=${VERSION} \
+    && make pre-ui \
+    && make generate-ui \
+    && make ui
 
 # Backend
 FROM golang:1.22-bookworm as backend
 RUN apt update && apt install -y build-essential golang
 WORKDIR /stash
-COPY --from=source /src/go* /src/*.go /src/Makefile /src/gqlgen.yml /src/.gqlgenc.yml /stash/
-COPY --from=source /src/scripts /stash/scripts/
-COPY --from=source /src/pkg /stash/pkg/
-COPY --from=source /src/cmd /stash/cmd
-COPY --from=source /src/internal /stash/internal
-COPY --from=frontend /stash /stash/
-RUN \
-    make generate-backend \
+COPY --from=frontend /stash /stash
+RUN true \
+    && export STASH_VERSION=${VERSION} \
+    && make generate-backend \
     && make flags-release flags-pie stash
 
 # Runtime
