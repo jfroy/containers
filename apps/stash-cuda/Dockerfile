@@ -68,7 +68,9 @@ RUN \
     && apt-get -y install python3 python3-pip python-is-python3 \
     && rm -rf /var/lib/apt/lists/* /var/cache/* /run/jellyfin-ffmpeg6_6.0.1-7-jammy_amd64.deb \
     && pip install uv \
-    && uv pip install --system stashapp-tools
+    && uv pip install --system stashapp-tools \
+    && groupadd -g 1000 ubuntu \
+    && useradd -g 1000 -u 1000 ubuntu
 EXPOSE 9999
 ENTRYPOINT ["/usr/bin/stash"]
 
