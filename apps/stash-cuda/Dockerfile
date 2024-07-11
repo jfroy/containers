@@ -65,6 +65,7 @@ RUN \
     && uv pip install --system stashapp-tools \
     && groupadd -g 1000 ubuntu \
     && useradd -g 1000 -u 1000 ubuntu \
+    && chown -R 1000:1000 /config \
     && touch /.dockerenv
 
 USER ubuntu:ubuntu
