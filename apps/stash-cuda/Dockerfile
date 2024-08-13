@@ -29,7 +29,7 @@ RUN true \
     && make ui
 
 # Backend
-FROM golang:1.22-bookworm as backend
+FROM golang:1.23-bookworm as backend
 RUN apt update && apt install -y build-essential golang
 WORKDIR /stash
 COPY --from=frontend /stash /stash
