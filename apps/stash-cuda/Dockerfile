@@ -39,7 +39,7 @@ RUN true \
     && make flags-release flags-pie stash
 
 # Runtime
-FROM nvidia/cuda:12.6.0-runtime-ubuntu22.04
+FROM nvidia/cuda:12.6.1-runtime-ubuntu22.04
 ENV \
     DEBIAN_FRONTEND=noninteractive \
     LANG=C.UTF-8 \
