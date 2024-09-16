@@ -111,7 +111,6 @@ Container | Channel | Image
 [actions-runner](https://github.com/jfroy/containers/pkgs/container/actions-runner) | stable | ghcr.io/jfroy/actions-runner
 [bazarr](https://github.com/jfroy/containers/pkgs/container/bazarr) | stable | ghcr.io/jfroy/bazarr
 [jbops](https://github.com/jfroy/containers/pkgs/container/jbops) | stable | ghcr.io/jfroy/jbops
-[lidarr-develop](https://github.com/jfroy/containers/pkgs/container/lidarr-develop) | develop | ghcr.io/jfroy/lidarr-develop
 [par2cmdline-turbo](https://github.com/jfroy/containers/pkgs/container/par2cmdline-turbo) | stable | ghcr.io/jfroy/par2cmdline-turbo
 [plex](https://github.com/jfroy/containers/pkgs/container/plex) | stable | ghcr.io/jfroy/plex
 [plex-beta](https://github.com/jfroy/containers/pkgs/container/plex-beta) | beta | ghcr.io/jfroy/plex-beta
@@ -120,7 +119,6 @@ Container | Channel | Image
 [qbittorrent](https://github.com/jfroy/containers/pkgs/container/qbittorrent) | stable | ghcr.io/jfroy/qbittorrent
 [qbittorrent-beta](https://github.com/jfroy/containers/pkgs/container/qbittorrent-beta) | beta | ghcr.io/jfroy/qbittorrent-beta
 [radarr-develop](https://github.com/jfroy/containers/pkgs/container/radarr-develop) | develop | ghcr.io/jfroy/radarr-develop
-[readarr-develop](https://github.com/jfroy/containers/pkgs/container/readarr-develop) | develop | ghcr.io/jfroy/readarr-develop
 [sabnzbd](https://github.com/jfroy/containers/pkgs/container/sabnzbd) | stable | ghcr.io/jfroy/sabnzbd
 [sonarr](https://github.com/jfroy/containers/pkgs/container/sonarr) | main | ghcr.io/jfroy/sonarr
 [sonarr-develop](https://github.com/jfroy/containers/pkgs/container/sonarr-develop) | develop | ghcr.io/jfroy/sonarr-develop
