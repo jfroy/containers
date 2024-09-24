@@ -122,7 +122,6 @@ Container | Channel | Image
 [sabnzbd](https://github.com/jfroy/containers/pkgs/container/sabnzbd) | stable | ghcr.io/jfroy/sabnzbd
 [sonarr](https://github.com/jfroy/containers/pkgs/container/sonarr) | main | ghcr.io/jfroy/sonarr
 [sonarr-develop](https://github.com/jfroy/containers/pkgs/container/sonarr-develop) | develop | ghcr.io/jfroy/sonarr-develop
-[stash-cuda](https://github.com/jfroy/containers/pkgs/container/stash-cuda) | stable | ghcr.io/jfroy/stash-cuda
 [theme-park](https://github.com/jfroy/containers/pkgs/container/theme-park) | stable | ghcr.io/jfroy/theme-park
 [volsync](https://github.com/jfroy/containers/pkgs/container/volsync) | stable | ghcr.io/jfroy/volsync
 [vuetorrent](https://github.com/jfroy/containers/pkgs/container/vuetorrent) | stable | ghcr.io/jfroy/vuetorrent
