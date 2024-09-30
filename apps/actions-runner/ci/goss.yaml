@@ -3,3 +3,9 @@
 file:
   /usr/bin/git:
     exists: true
+  /usr/local/bin/flux:
+    exists: true
+  /usr/local/bin/kubectl:
+    exists: true
+  /usr/local/bin/yq:
+    exists: true
