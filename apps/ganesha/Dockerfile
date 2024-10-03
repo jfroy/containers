@@ -75,22 +75,24 @@ WORKDIR /
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-    bash \
-    ca-certificates \
-    catatonit \
-    libacl1 \
-    libblkid1 \
-    libcap2 \
-    libjemalloc2 \
-    libnfsidmap1 \
-    libnsl2 \
-    libsqlite3-0 \
-    libtirpc-common \
-    libunwind8 \
-    liburcu8 \
-    libuuid1 \
-    tzdata \
-    xfsprogs
+        bash \
+        ca-certificates \
+        catatonit \
+        libacl1 \
+        libblkid1 \
+        libcap2 \
+        libjemalloc2 \
+        libnfsidmap1 \
+        libnsl2 \
+        libsqlite3-0 \
+        libtirpc-common \
+        libunwind8 \
+        liburcu8 \
+        libuuid1 \
+        tzdata \
+        xfsprogs \
+    && rm -rf /var/lib/apt/lists/* \
+    && ln -sf /proc/mounts /etc/mtab
 
 COPY --from=build --chown=root:root /usr/local/ /usr/local/
 COPY --chown=root:root --chmod=644 ./apps/ganesha/ganesha.conf /etc/ganesha/ganesha.conf
