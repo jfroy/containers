@@ -110,6 +110,7 @@ Container | Channel | Image
 --- | --- | ---
 [actions-runner](https://github.com/jfroy/containers/pkgs/container/actions-runner) | stable | ghcr.io/jfroy/actions-runner
 [bazarr](https://github.com/jfroy/containers/pkgs/container/bazarr) | stable | ghcr.io/jfroy/bazarr
+[ganesha](https://github.com/jfroy/containers/pkgs/container/ganesha) | stable | ghcr.io/jfroy/ganesha
 [jbops](https://github.com/jfroy/containers/pkgs/container/jbops) | stable | ghcr.io/jfroy/jbops
 [par2cmdline-turbo](https://github.com/jfroy/containers/pkgs/container/par2cmdline-turbo) | stable | ghcr.io/jfroy/par2cmdline-turbo
 [plex](https://github.com/jfroy/containers/pkgs/container/plex) | stable | ghcr.io/jfroy/plex
