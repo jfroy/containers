@@ -1,9 +1,8 @@
 FROM docker.io/debian:bookworm-slim AS build
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG TARGETPLATFORM
-ARG VERSION
-
+USER root
+WORKDIR /
 RUN apt-get update
 RUN apt-get install -y --no-install-recommends \
     bison \
@@ -27,8 +26,8 @@ RUN apt-get install -y --no-install-recommends \
     uuid-dev \
     xfslibs-dev
 
+ARG VERSION
 RUN git clone --branch "V${VERSION}" --depth 1 --recursive https://github.com/nfs-ganesha/nfs-ganesha.git /app
-
 WORKDIR /app/src
 RUN cmake -G Ninja -B ./build/ \
     -D CMAKE_BUILD_TYPE=Release \
@@ -69,10 +68,11 @@ RUN cmake -G Ninja -B ./build/ \
 RUN ninja -C ./build/ install
 
 FROM docker.io/debian:bookworm-slim AS runtime
+
 ARG DEBIAN_FRONTEND=noninteractive
 
+USER root
 WORKDIR /
-
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         bash \
@@ -93,18 +93,10 @@ RUN apt-get update \
         xfsprogs \
     && rm -rf /var/lib/apt/lists/* \
     && ln -sf /proc/mounts /etc/mtab
-
 COPY --from=build --chown=root:root /usr/local/ /usr/local/
-COPY --chown=root:root --chmod=644 ./apps/ganesha/ganesha.conf /etc/ganesha/ganesha.conf
-
-EXPOSE 2049/tcp
-VOLUME ["/export"]
-VOLUME ["/recovery"]
-
-USER root
 
 ENTRYPOINT ["/usr/bin/catatonit", "--", "/usr/local/bin/ganesha.nfsd"]
-CMD ["-F", "-x", "-L", "STDOUT", "-f", "/etc/ganesha/ganesha.conf"]
+CMD ["-F", "-x", "-L", "STDOUT", "-f", "/config/ganesha.conf"]
 ENV LD_LIBRARY_PATH=/usr/local/lib
 
 LABEL org.opencontainers.image.source="https://github.com/nfs-ganesha/nfs-ganesha"
