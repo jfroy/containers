@@ -1,7 +1,7 @@
 import sys
 import os
 
-sys.path.append(os.path.abspath(".github/scripts"))
+sys.path.append(os.path.abspath("scripts"))
 
 from apksearch import apksearch
 

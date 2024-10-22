@@ -16,6 +16,8 @@ ENV \
 ENV UMASK="0002" \
     TZ="Etc/UTC"
 
+ENV BAZARR__PORT=6767
+
 USER root
 WORKDIR /app
 
@@ -52,26 +54,21 @@ RUN \
     && \
     rm -rf /app/bin/bin \
     && \
-    printf "UpdateMethod=docker\nBranch=master\nPackageVersion=%s\nPackageAuthor=[onedr0p](https://github.com/onedr0p)\n" "${VERSION}" > /app/package_info \
+    printf "UpdateMethod=docker\nBranch=master\nPackageVersion=%s\nPackageAuthor=[jfroy](https://github.com/jfroy)\n" "${VERSION}" > /app/package_info \
     && pip install --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
         --requirement /app/bin/requirements.txt \
         --requirement /app/bin/postgres-requirements.txt \
-    && chown -R root:root /app \
-    && chmod -R 755 /app \
+    && chown -R root:root /app && chmod -R 755 /app \
     && apk del --purge .build-deps \
-    && rm -rf \
-        /root/.cache \
-        /root/.cargo \
-        /tmp/*
+    && rm -rf /root/.cache /root/.cargo /tmp/*
 
 COPY ./apps/bazarr/entrypoint.sh /entrypoint.sh
-COPY --from=ghcr.io/linuxserver/unrar:7.0.9 /usr/bin/unrar-alpine /usr/bin/unrar
+COPY --from=ghcr.io/linuxserver/unrar:latest /usr/bin/unrar-alpine /usr/bin/unrar
 
 USER nobody:nogroup
 WORKDIR /config
 VOLUME ["/config"]
 
-ENTRYPOINT ["/usr/bin/catatonit", "--"]
-CMD ["/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
 
 LABEL org.opencontainers.image.source="https://github.com/morpheus65535/bazarr"

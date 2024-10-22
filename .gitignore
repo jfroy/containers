@@ -1,3 +1,5 @@
-.goss
-.private
+.private/
+.task/
+.venv/
+__pycache__/
 **/*.pyc

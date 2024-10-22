@@ -15,16 +15,10 @@ RUN \
     && \
     apt-get install -y --no-install-recommends --no-install-suggests \
         ca-certificates \
-        curl \
         gcc \
-        git \
         jo \
-        jq \
         moreutils \
-        unrar \
-        unzip \
         wget \
-        zip \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=ghcr.io/fluxcd/flux-cli:v2.4.0 /usr/local/bin/flux /usr/local/bin/flux
