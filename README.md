@@ -1,6 +1,6 @@
 <!---
 NOTE: AUTO-GENERATED FILE
-to edit this file, instead edit its template at: ./github/scripts/templates/README.md.j2
+to edit this file, instead edit its template at: ./scripts/templates/README.md.j2
 -->
 <div align="center">
 
@@ -89,11 +89,10 @@ Some applications do not support defining configuration via environment variable
 
 1. First read the Kubernetes docs on [defining command and arguments for a Container](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
 2. Look up the documentation for the application and find a argument you would like to set.
-3. Set the argument in the `args` section, be sure to include `entrypoint.sh` as the first arg and any application specific arguments thereafter.
+3. Set the extra arguments in the `args` section like below.
 
     ```yaml
     args:
-      - /entrypoint.sh
       - --port
       - "8080"
     ```
@@ -108,25 +107,24 @@ Each Image will be built with a `rolling` tag, along with tags specific to it's 
 
 Container | Channel | Image
 --- | --- | ---
-[actions-runner](https://github.com/jfroy/containers/pkgs/container/actions-runner) | stable | ghcr.io/jfroy/actions-runner
-[bazarr](https://github.com/jfroy/containers/pkgs/container/bazarr) | stable | ghcr.io/jfroy/bazarr
-[ganesha](https://github.com/jfroy/containers/pkgs/container/ganesha) | stable | ghcr.io/jfroy/ganesha
-[jbops](https://github.com/jfroy/containers/pkgs/container/jbops) | stable | ghcr.io/jfroy/jbops
-[par2cmdline-turbo](https://github.com/jfroy/containers/pkgs/container/par2cmdline-turbo) | stable | ghcr.io/jfroy/par2cmdline-turbo
-[plex](https://github.com/jfroy/containers/pkgs/container/plex) | stable | ghcr.io/jfroy/plex
-[plex-beta](https://github.com/jfroy/containers/pkgs/container/plex-beta) | beta | ghcr.io/jfroy/plex-beta
-[postgres-init](https://github.com/jfroy/containers/pkgs/container/postgres-init) | stable | ghcr.io/jfroy/postgres-init
-[prowlarr-develop](https://github.com/jfroy/containers/pkgs/container/prowlarr-develop) | develop | ghcr.io/jfroy/prowlarr-develop
-[qbittorrent](https://github.com/jfroy/containers/pkgs/container/qbittorrent) | stable | ghcr.io/jfroy/qbittorrent
-[qbittorrent-beta](https://github.com/jfroy/containers/pkgs/container/qbittorrent-beta) | beta | ghcr.io/jfroy/qbittorrent-beta
-[radarr-develop](https://github.com/jfroy/containers/pkgs/container/radarr-develop) | develop | ghcr.io/jfroy/radarr-develop
-[sabnzbd](https://github.com/jfroy/containers/pkgs/container/sabnzbd) | stable | ghcr.io/jfroy/sabnzbd
-[sonarr](https://github.com/jfroy/containers/pkgs/container/sonarr) | main | ghcr.io/jfroy/sonarr
-[sonarr-develop](https://github.com/jfroy/containers/pkgs/container/sonarr-develop) | develop | ghcr.io/jfroy/sonarr-develop
-[theme-park](https://github.com/jfroy/containers/pkgs/container/theme-park) | stable | ghcr.io/jfroy/theme-park
-[volsync](https://github.com/jfroy/containers/pkgs/container/volsync) | stable | ghcr.io/jfroy/volsync
-[vuetorrent](https://github.com/jfroy/containers/pkgs/container/vuetorrent) | stable | ghcr.io/jfroy/vuetorrent
-[whisparr-nightly](https://github.com/jfroy/containers/pkgs/container/whisparr-nightly) | nightly | ghcr.io/jfroy/whisparr-nightly
+[actions-runner](https://github.com/jfroy/pkgs/container/actions-runner) | stable | ghcr.io/jfroy/actions-runner
+[bazarr](https://github.com/jfroy/pkgs/container/bazarr) | stable | ghcr.io/jfroy/bazarr
+[ganesha](https://github.com/jfroy/pkgs/container/ganesha) | stable | ghcr.io/jfroy/ganesha
+[jbops](https://github.com/jfroy/pkgs/container/jbops) | stable | ghcr.io/jfroy/jbops
+[plex](https://github.com/jfroy/pkgs/container/plex) | stable | ghcr.io/jfroy/plex
+[plex-beta](https://github.com/jfroy/pkgs/container/plex-beta) | beta | ghcr.io/jfroy/plex-beta
+[postgres-init](https://github.com/jfroy/pkgs/container/postgres-init) | stable | ghcr.io/jfroy/postgres-init
+[prowlarr-develop](https://github.com/jfroy/pkgs/container/prowlarr-develop) | develop | ghcr.io/jfroy/prowlarr-develop
+[qbittorrent](https://github.com/jfroy/pkgs/container/qbittorrent) | stable | ghcr.io/jfroy/qbittorrent
+[qbittorrent-beta](https://github.com/jfroy/pkgs/container/qbittorrent-beta) | beta | ghcr.io/jfroy/qbittorrent-beta
+[radarr-develop](https://github.com/jfroy/pkgs/container/radarr-develop) | develop | ghcr.io/jfroy/radarr-develop
+[sabnzbd](https://github.com/jfroy/pkgs/container/sabnzbd) | stable | ghcr.io/jfroy/sabnzbd
+[sonarr](https://github.com/jfroy/pkgs/container/sonarr) | main | ghcr.io/jfroy/sonarr
+[sonarr-develop](https://github.com/jfroy/pkgs/container/sonarr-develop) | develop | ghcr.io/jfroy/sonarr-develop
+[tautulli](https://github.com/jfroy/pkgs/container/tautulli) | master | ghcr.io/jfroy/tautulli
+[volsync](https://github.com/jfroy/pkgs/container/volsync) | stable | ghcr.io/jfroy/volsync
+[vuetorrent](https://github.com/jfroy/pkgs/container/vuetorrent) | stable | ghcr.io/jfroy/vuetorrent
+[whisparr-nightly](https://github.com/jfroy/pkgs/container/whisparr-nightly) | nightly | ghcr.io/jfroy/whisparr-nightly
 
 
 ## Deprecations
