@@ -7,7 +7,7 @@ from apksearch import apksearch
 
 
 def get_latest(_: str) -> str | None:
-    return apksearch("postgresql16-client")
+    return apksearch("postgresql16-client", repo="v3.20/main")
 
 
 if __name__ == "__main__":
