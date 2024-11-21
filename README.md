@@ -142,6 +142,7 @@ Container | Channel | Image
 [sonarr](https://github.com/jfroy/pkgs/container/sonarr) | main | ghcr.io/jfroy/sonarr
 [sonarr-develop](https://github.com/jfroy/pkgs/container/sonarr-develop) | develop | ghcr.io/jfroy/sonarr-develop
 [tautulli](https://github.com/jfroy/pkgs/container/tautulli) | master | ghcr.io/jfroy/tautulli
+[telegraf-zfs](https://github.com/jfroy/pkgs/container/telegraf-zfs) | stable | ghcr.io/jfroy/telegraf-zfs
 [volsync](https://github.com/jfroy/pkgs/container/volsync) | stable | ghcr.io/jfroy/volsync
 [vuetorrent](https://github.com/jfroy/pkgs/container/vuetorrent) | stable | ghcr.io/jfroy/vuetorrent
 [whisparr-nightly](https://github.com/jfroy/pkgs/container/whisparr-nightly) | nightly | ghcr.io/jfroy/whisparr-nightly
