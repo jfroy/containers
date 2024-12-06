@@ -124,28 +124,27 @@ Each Image will be built with a `rolling` tag, along with tags specific to it's 
 
 Container | Channel | Image
 --- | --- | ---
-[actions-runner](https://github.com/jfroy/pkgs/container/actions-runner) | stable | ghcr.io/jfroy/actions-runner
-[bazarr](https://github.com/jfroy/pkgs/container/bazarr) | stable | ghcr.io/jfroy/bazarr
-[caddy-scratch](https://github.com/jfroy/pkgs/container/caddy-scratch) | stable | ghcr.io/jfroy/caddy-scratch
-[ganesha](https://github.com/jfroy/pkgs/container/ganesha) | stable | ghcr.io/jfroy/ganesha
-[it-tools](https://github.com/jfroy/pkgs/container/it-tools) | stable | ghcr.io/jfroy/it-tools
-[jbops](https://github.com/jfroy/pkgs/container/jbops) | stable | ghcr.io/jfroy/jbops
-[plex](https://github.com/jfroy/pkgs/container/plex) | stable | ghcr.io/jfroy/plex
-[plex-beta](https://github.com/jfroy/pkgs/container/plex-beta) | beta | ghcr.io/jfroy/plex-beta
-[postgres-init](https://github.com/jfroy/pkgs/container/postgres-init) | stable | ghcr.io/jfroy/postgres-init
-[prowlarr-develop](https://github.com/jfroy/pkgs/container/prowlarr-develop) | develop | ghcr.io/jfroy/prowlarr-develop
-[qbittorrent](https://github.com/jfroy/pkgs/container/qbittorrent) | stable | ghcr.io/jfroy/qbittorrent
-[qbittorrent-beta](https://github.com/jfroy/pkgs/container/qbittorrent-beta) | beta | ghcr.io/jfroy/qbittorrent-beta
-[radarr-develop](https://github.com/jfroy/pkgs/container/radarr-develop) | develop | ghcr.io/jfroy/radarr-develop
-[sabnzbd](https://github.com/jfroy/pkgs/container/sabnzbd) | stable | ghcr.io/jfroy/sabnzbd
-[smartctl_exporter](https://github.com/jfroy/pkgs/container/smartctl_exporter) | stable | ghcr.io/jfroy/smartctl_exporter
-[sonarr](https://github.com/jfroy/pkgs/container/sonarr) | main | ghcr.io/jfroy/sonarr
-[sonarr-develop](https://github.com/jfroy/pkgs/container/sonarr-develop) | develop | ghcr.io/jfroy/sonarr-develop
-[tautulli](https://github.com/jfroy/pkgs/container/tautulli) | master | ghcr.io/jfroy/tautulli
-[telegraf-zfs](https://github.com/jfroy/pkgs/container/telegraf-zfs) | stable | ghcr.io/jfroy/telegraf-zfs
-[volsync](https://github.com/jfroy/pkgs/container/volsync) | stable | ghcr.io/jfroy/volsync
-[vuetorrent](https://github.com/jfroy/pkgs/container/vuetorrent) | stable | ghcr.io/jfroy/vuetorrent
-[whisparr-nightly](https://github.com/jfroy/pkgs/container/whisparr-nightly) | nightly | ghcr.io/jfroy/whisparr-nightly
+[actions-runner](https://github.com/jfroy/containers/pkgs/container/actions-runner) | stable | ghcr.io/jfroy/actions-runner
+[bazarr](https://github.com/jfroy/containers/pkgs/container/bazarr) | stable | ghcr.io/jfroy/bazarr
+[caddy-scratch](https://github.com/jfroy/containers/pkgs/container/caddy-scratch) | stable | ghcr.io/jfroy/caddy-scratch
+[ganesha](https://github.com/jfroy/containers/pkgs/container/ganesha) | stable | ghcr.io/jfroy/ganesha
+[it-tools](https://github.com/jfroy/containers/pkgs/container/it-tools) | stable | ghcr.io/jfroy/it-tools
+[jbops](https://github.com/jfroy/containers/pkgs/container/jbops) | stable | ghcr.io/jfroy/jbops
+[plex](https://github.com/jfroy/containers/pkgs/container/plex) | stable | ghcr.io/jfroy/plex
+[plex-beta](https://github.com/jfroy/containers/pkgs/container/plex-beta) | beta | ghcr.io/jfroy/plex-beta
+[postgres-init](https://github.com/jfroy/containers/pkgs/container/postgres-init) | stable | ghcr.io/jfroy/postgres-init
+[prowlarr-develop](https://github.com/jfroy/containers/pkgs/container/prowlarr-develop) | develop | ghcr.io/jfroy/prowlarr-develop
+[qbittorrent](https://github.com/jfroy/containers/pkgs/container/qbittorrent) | stable | ghcr.io/jfroy/qbittorrent
+[qbittorrent-beta](https://github.com/jfroy/containers/pkgs/container/qbittorrent-beta) | beta | ghcr.io/jfroy/qbittorrent-beta
+[radarr-develop](https://github.com/jfroy/containers/pkgs/container/radarr-develop) | develop | ghcr.io/jfroy/radarr-develop
+[sabnzbd](https://github.com/jfroy/containers/pkgs/container/sabnzbd) | stable | ghcr.io/jfroy/sabnzbd
+[smartctl_exporter](https://github.com/jfroy/containers/pkgs/container/smartctl_exporter) | stable | ghcr.io/jfroy/smartctl_exporter
+[sonarr](https://github.com/jfroy/containers/pkgs/container/sonarr) | main | ghcr.io/jfroy/sonarr
+[sonarr-develop](https://github.com/jfroy/containers/pkgs/container/sonarr-develop) | develop | ghcr.io/jfroy/sonarr-develop
+[tautulli](https://github.com/jfroy/containers/pkgs/container/tautulli) | master | ghcr.io/jfroy/tautulli
+[telegraf-zfs](https://github.com/jfroy/containers/pkgs/container/telegraf-zfs) | stable | ghcr.io/jfroy/telegraf-zfs
+[vuetorrent](https://github.com/jfroy/containers/pkgs/container/vuetorrent) | stable | ghcr.io/jfroy/vuetorrent
+[whisparr-nightly](https://github.com/jfroy/containers/pkgs/container/whisparr-nightly) | nightly | ghcr.io/jfroy/whisparr-nightly
 
 
 ## Deprecations
