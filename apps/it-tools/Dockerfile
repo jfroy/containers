@@ -22,6 +22,6 @@ RUN \
   && pnpm install --prefer-offline \
   && pnpm build
 
-  FROM ghcr.io/jfroy/caddy-scratch:2.8.4
+  FROM ghcr.io/jfroy/caddy-scratch:2.9.0
   COPY --chown=1000:1000 --from=build /app/dist/ /app
   CMD ["file-server", "--root", "/app", "--listen", ":8080"]
