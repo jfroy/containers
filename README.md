@@ -131,7 +131,6 @@ Container | Channel | Image
 [it-tools](https://github.com/jfroy/containers/pkgs/container/it-tools) | stable | ghcr.io/jfroy/it-tools
 [jbops](https://github.com/jfroy/containers/pkgs/container/jbops) | stable | ghcr.io/jfroy/jbops
 [plex](https://github.com/jfroy/containers/pkgs/container/plex) | stable | ghcr.io/jfroy/plex
-[plex-beta](https://github.com/jfroy/containers/pkgs/container/plex-beta) | beta | ghcr.io/jfroy/plex-beta
 [postgres-init](https://github.com/jfroy/containers/pkgs/container/postgres-init) | stable | ghcr.io/jfroy/postgres-init
 [prowlarr-develop](https://github.com/jfroy/containers/pkgs/container/prowlarr-develop) | develop | ghcr.io/jfroy/prowlarr-develop
 [qbittorrent](https://github.com/jfroy/containers/pkgs/container/qbittorrent) | stable | ghcr.io/jfroy/qbittorrent
