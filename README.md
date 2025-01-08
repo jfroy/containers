@@ -134,7 +134,6 @@ Container | Channel | Image
 [postgres-init](https://github.com/jfroy/containers/pkgs/container/postgres-init) | stable | ghcr.io/jfroy/postgres-init
 [prowlarr-develop](https://github.com/jfroy/containers/pkgs/container/prowlarr-develop) | develop | ghcr.io/jfroy/prowlarr-develop
 [qbittorrent](https://github.com/jfroy/containers/pkgs/container/qbittorrent) | stable | ghcr.io/jfroy/qbittorrent
-[qbittorrent-beta](https://github.com/jfroy/containers/pkgs/container/qbittorrent-beta) | beta | ghcr.io/jfroy/qbittorrent-beta
 [radarr-develop](https://github.com/jfroy/containers/pkgs/container/radarr-develop) | develop | ghcr.io/jfroy/radarr-develop
 [sabnzbd](https://github.com/jfroy/containers/pkgs/container/sabnzbd) | stable | ghcr.io/jfroy/sabnzbd
 [smartctl_exporter](https://github.com/jfroy/containers/pkgs/container/smartctl_exporter) | stable | ghcr.io/jfroy/smartctl_exporter
