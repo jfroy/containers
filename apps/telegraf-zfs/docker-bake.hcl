@@ -2,7 +2,7 @@ target "docker-metadata-action" {}
 
 variable "VERSION" {
   // renovate: datasource=github-releases depName=influxdata/telegraf
-  default = "v1.34.3"
+  default = "1.34.3"
 }
 
 variable "SOURCE" {
