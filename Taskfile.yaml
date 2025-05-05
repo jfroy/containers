@@ -1,13 +1,12 @@
 ---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: '3'
 
-vars:
-  LABELS_CONFIG_FILE: '{{.ROOT_DIR}}/.github/labels.yaml'
-  PIP_REQUIREMENTS_FILE: '{{.ROOT_DIR}}/requirements.txt'
-  PYTHON_BIN: python3
+set: [pipefail]
+shopt: [globstar]
 
-env:
-  VIRTUAL_ENV: '{{.ROOT_DIR}}/.venv'
+vars:
+  BIN_DIR: '{{.ROOT_DIR}}/.bin'
 
 tasks:
 
@@ -15,25 +14,64 @@ tasks:
     cmd: task --list
     silent: true
 
-  venv:
-    desc: Set up a Python virtual environment
+  init:
+    desc: Initialize the project
     cmds:
-      - '{{.PYTHON_BIN}} -m venv {{.VIRTUAL_ENV}}'
-      - '{{.VIRTUAL_ENV}}/bin/python3 -m pip install --upgrade pip setuptools wheel'
-      - '{{.VIRTUAL_ENV}}/bin/python3 -m pip install --upgrade --requirement "{{.PIP_REQUIREMENTS_FILE}}"'
-    sources:
-      - '{{.PIP_REQUIREMENTS_FILE}}'
-    generates:
-      - '{{.VIRTUAL_ENV}}/pyvenv.cfg'
+      - mkdir -p {{.BIN_DIR}}/{goss,dgoss}
+      - gh release download --repo goss-org/goss --skip-existing --pattern "*-linux-{{ARCH}}" --output {{.BIN_DIR}}/goss/goss
+      - gh release download --repo goss-org/goss --skip-existing --pattern "dgoss" --output {{.BIN_DIR}}/goss/dgoss
+      - chmod +x {{.BIN_DIR}}/goss/goss {{.BIN_DIR}}/dgoss/dgoss
     preconditions:
-      - test -f {{.PIP_REQUIREMENTS_FILE}}
+      - which gh
 
-  append-app-labels:
-    desc: Append app labels to the labels config file
+  local-build-*:
+    desc: Build and Test an app via Docker Buildx
+    dir: '{{.ROOT_DIR}}/apps/{{.APP}}'
+    cmds:
+      - docker buildx bake --metadata-file docker-bake.json --load
+      - |
+        IMAGE=$(jq --raw-output '."image-local"."image.name"' docker-bake.json)
+        case "{{.TEST_TOOL}}" in
+            "cst")
+                container-structure-test test --image "${IMAGE}" --config tests.yaml
+                ;;
+            "goss")
+                {{.ROOT_DIR}}/.bin/dgoss/dgoss run "${IMAGE}"
+                ;;
+        esac
+      - defer: rm -f docker-bake.json
+    env:
+      GOSS_FILE: tests.yaml
+      GOSS_OPTS: --retry-timeout 60s --sleep 1s
+      GOSS_PATH: '{{.BIN_DIR}}/goss/goss'
+    vars:
+      APP: '{{index .MATCH 0}}'
+      TEST_TOOL:
+        sh: yq --exit-status '.schemaVersion' {{.ROOT_DIR}}/apps/{{.APP}}/tests.yaml &>/dev/null && echo "cst" || echo "goss"
+    preconditions:
+      - test -f {{.ROOT_DIR}}/apps/{{.APP}}/docker-bake.hcl
+      - test -f {{.ROOT_DIR}}/apps/{{.APP}}/tests.yaml
+      - test -f {{.ROOT_DIR}}/apps/{{.APP}}/Dockerfile
+      - which container-structure-test docker gh jq yq
+
+  remote-build-*:
+    desc: Build and Test an app via GitHub Actions
+    cmds:
+      - gh workflow run release.yaml -f app={{.APP}} -f release={{.RELEASE}}
+    vars:
+      APP: '{{index .MATCH 0}}'
+      RELEASE: '{{.RELEASE | default "false"}}'
+    preconditions:
+      - gh auth status
+      - test -f {{.ROOT_DIR}}/.github/workflows/release.yaml
+      - which gh
+
+  generate-app-labels:
+    desc: Generate app labels in the labels config file
     cmds:
       - for: { var: apps }
         cmd: |
-          yq --inplace '. += [{"name": "app/{{.ITEM}}", "color": "0e8a16"}]' {{.LABELS_CONFIG_FILE}}
+          yq --inplace '. += [{"name": "app/{{.ITEM}}", "color": "0e8a16"}]' {{.ROOT_DIR}}/.github/labels.yaml
     vars:
       apps:
         sh: ls --directory {{.ROOT_DIR}}/apps/*/ | xargs --max-args=1 basename

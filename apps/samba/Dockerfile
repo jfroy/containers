@@ -2,7 +2,6 @@ FROM alpine:latest AS builder
 
 ARG TARGETARCH
 ARG VERSION
-ARG CHANNEL
 
 RUN apk add --no-cache \
     acl-dev \
