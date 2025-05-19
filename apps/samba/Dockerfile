@@ -79,7 +79,7 @@ RUN wget -q https://github.com/samba-in-kubernetes/sambacc/releases/download/v0.
     && pip3 install --break-system-packages sambacc-0.6-py3-none-any.whl \
     && rm sambacc-0.6-py3-none-any.whl
 COPY --from=builder /out/usr /usr
-COPY apps/samba/smb.conf /etc/samba/smb.conf
+COPY ./smb.conf /etc/samba/smb.conf
 
 EXPOSE 445
 ENTRYPOINT ["samba-container"]
