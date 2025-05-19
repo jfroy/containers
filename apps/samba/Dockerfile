@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libtevent-dev \
     libtirpc-dev \
     liburing-dev \
-    python3 \
+    python3-dev \
     wget \
     zlib1g-dev
 
@@ -40,7 +40,6 @@ RUN ./configure \
         --disable-fault-handling \
         --disable-glusterfs \
         --disable-iprint \
-        --disable-python \
         --enable-fhs \
         --enable-spotlight \
         --nonshared-binary=smbtorture,smbd/smbd \
@@ -69,9 +68,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libicu76 \
         libjansson4 \
         libpopt0 \
+        libpython3.13 \
         libtirpc3t64 \
         liburing2 \
         python3-pip \
+        python3-yaml \
         wget \
     && rm -rf /var/lib/apt/lists/*
 RUN wget -q https://github.com/samba-in-kubernetes/sambacc/releases/download/v0.6/sambacc-0.6-py3-none-any.whl \
