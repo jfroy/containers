@@ -18,6 +18,9 @@ on:
         description: Create Release
         default: true
 
+permissions:
+  contents: read
+
 jobs:
   deprecate:
     name: Deprecate (${{ inputs.app }})
