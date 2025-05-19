@@ -1,34 +1,32 @@
-FROM alpine:latest AS builder
+FROM ubuntu:25.10 AS builder
 
 ARG TARGETARCH
 ARG VERSION
 
-RUN apk add --no-cache \
-    acl-dev \
-    attr-dev \
-    avahi-dev \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     bash \
     bison \
-    build-base \
+    build-essential \
+    ca-certificates \
     cmake \
-    dbus-dev \
     flex \
     git \
-    gnutls-dev \
-    icu-dev \
-    jansson-dev \
-    krb5-dev \
+    libacl1-dev \
+    libavahi-client-dev \
+    libdbus-1-dev \
+    libgnutls28-dev \
+    libicu-dev \
+    libjansson-dev \
+    libparse-yapp-perl \
+    libpopt-dev \
+    libreadline-dev \
+    libtalloc-dev \
+    libtevent-dev \
     libtirpc-dev \
     liburing-dev \
-    linux-headers \
-    perl-parse-yapp \
-    popt-dev \
-    readline-dev \
-    talloc-dev \
-    tevent-dev \
-    util-linux-dev \
+    python3 \
     wget \
-    zlib-dev
+    zlib1g-dev
 
 WORKDIR /build
 RUN wget -q https://download.samba.org/pub/samba/stable/samba-${VERSION}.tar.gz \
@@ -61,9 +59,17 @@ RUN ./configure \
     && make -j$(nproc) \
     && make DESTDIR=/out install
 
-FROM alpine:latest
+FROM ubuntu:25.10
 WORKDIR /
-RUN apk add --no-cache acl-libs avahi-libs dbus gnutls icu-libs jansson liburing popt zlib
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libavahi-client3 \
+        libgnutls30t64 \
+        libicu76 \
+        libjansson4 \
+        libpopt0 \
+        libtirpc3t64 \
+        liburing2 \
+    && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /out/usr /usr
 EXPOSE 445 139
 CMD ["smbd", "-F", "--no-process-group"]
