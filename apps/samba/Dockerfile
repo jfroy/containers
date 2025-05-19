@@ -52,6 +52,7 @@ RUN ./configure \
         --without-ldb-lmdb \
         --without-libarchive \
         --without-pam \
+        --without-quotas \
         --without-regedit \
         --without-systemd \
         --without-winexe \
