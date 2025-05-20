@@ -1,9 +1,6 @@
 ---
 schemaVersion: "2.0.0"
 fileExistenceTests:
-  - name: samba-container
-    path: /usr/local/bin/samba-container
-    shouldExist: true
-  - name: smbd
-    path: /usr/sbin/smbd
+  - name: avahi
+    path: /usr/sbin/avahi-daemon
     shouldExist: true
