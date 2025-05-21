@@ -6,4 +6,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT ["/usr/bin/dbus-daemon"]
-CMD ["--system", "--address=unix:path=/run/dbus/system_bus_socket", "--nopidfile", "--nofork"]
+CMD ["--nopidfile", "--nofork"]
