@@ -1,4 +1,4 @@
-FROM docker.io/library/alpine:3.21 as build
+FROM docker.io/library/alpine:3.22 as build
 
 ARG TARGETPLATFORM
 ARG VERSION
@@ -20,7 +20,7 @@ RUN \
     && chmod -R u=rwX,go=rX /vuetorrent \
     && rm -rf /tmp/*
 
-FROM docker.io/library/alpine:3.21
+FROM docker.io/library/alpine:3.22
 
 USER nobody:nogroup
 WORKDIR /vuetorrent
