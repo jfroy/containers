@@ -14,16 +14,6 @@ tasks:
     cmd: task --list
     silent: true
 
-  init:
-    desc: Initialize the project
-    cmds:
-      - mkdir -p {{.BIN_DIR}}/{goss,dgoss}
-      - gh release download --repo goss-org/goss --skip-existing --pattern "*-linux-{{ARCH}}" --output {{.BIN_DIR}}/goss/goss
-      - gh release download --repo goss-org/goss --skip-existing --pattern "dgoss" --output {{.BIN_DIR}}/goss/dgoss
-      - chmod +x {{.BIN_DIR}}/goss/goss {{.BIN_DIR}}/dgoss/dgoss
-    preconditions:
-      - which gh
-
   local-build-*:
     desc: Build and Test an app via Docker Buildx
     dir: '{{.WORK_DIR}}'
@@ -38,9 +28,11 @@ tasks:
                 container-structure-test test --image "${IMAGE}" --config tests.yaml
                 ;;
             "goss")
-                {{.BIN_DIR}}/dgoss/dgoss run "${IMAGE}"
+                {{.BIN_DIR}}/goss/dgoss run "${IMAGE}"
                 ;;
         esac
+        echo "To run this image, use the following command:"
+        echo "docker run --rm -it ${IMAGE}"
       - defer: rm -rf {{.WORK_DIR}}
     env:
       GOSS_FILE: tests.yaml
@@ -53,6 +45,8 @@ tasks:
       WORK_DIR:
         sh: mktemp -d
     preconditions:
+      - test -f {{.BIN_DIR}}/goss/dgoss
+      - test -f {{.BIN_DIR}}/goss/goss
       - test -f {{.ROOT_DIR}}/apps/{{.APP}}/docker-bake.hcl
       - test -f {{.ROOT_DIR}}/apps/{{.APP}}/tests.yaml
       - test -f {{.ROOT_DIR}}/apps/{{.APP}}/Dockerfile
