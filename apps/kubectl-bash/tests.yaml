@@ -5,5 +5,5 @@ fileExistenceTests:
     path: /bin/bash
     shouldExist: true
   - name: kubectl
-    path: /kubectl
+    path: /usr/local/bin/kubectl
     shouldExist: true

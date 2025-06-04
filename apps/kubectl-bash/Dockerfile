@@ -7,5 +7,5 @@ RUN apk add --no-cache bash \
     && chmod +x  /usr/local/bin/kubectl
 
 USER nobody
-ENTRYPOINT ["/kubectl"]
+ENTRYPOINT ["/usr/local/bin/kubectl"]
 CMD ["--help"]
