@@ -1,0 +1,9 @@
+---
+schemaVersion: "2.0.0"
+fileExistenceTests:
+  - name: bash
+    path: /bin/bash
+    shouldExist: true
+  - name: kubectl
+    path: /kubectl
+    shouldExist: true
