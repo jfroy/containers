@@ -2,7 +2,7 @@ target "docker-metadata-action" {}
 
 variable "VERSION" {
   // renovate: datasource=github-releases depName=VueTorrent/VueTorrent
-  default = "2.30.0"
+  default = "2.30.1"
 }
 
 variable "SOURCE" {
