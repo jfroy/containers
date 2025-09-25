@@ -19,19 +19,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
 
-      - name: Get Application Versions
+      - name: Get App Versions
         uses: ./.github/actions/app-versions
         id: app-versions
         with:
           upstream-version: ${{ inputs.version }}
 
       - name: Check Version Results
-        run: |
-          echo "Input Version: ${{ inputs.version }}"
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |-
+          echo "Input Version: ${INPUT_VERSION}"
           echo "Is Valid Semver: ${{ steps.app-versions.outputs.is-valid-semver }}"
           echo "Semantic Version: ${{ steps.app-versions.outputs.semantic }}"
           echo "Raw Version: ${{ steps.app-versions.outputs.raw }}"

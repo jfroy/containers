@@ -4,7 +4,7 @@ name: Stale
 
 on:
   schedule:
-    - cron: "30 1 * * *"
+    - cron: 30 1 * * *
   workflow_dispatch:
 
 permissions:
@@ -28,14 +28,14 @@ jobs:
           private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
 
       - name: Stale
-        uses: actions/stale@5bef64f19d7facfb25b37b414482c7164d639639 # v9.1.0
+        uses: actions/stale@3a9db7e6a41a89f618792c92c0e97cc736e1b13f # v10.0.0
         with:
           repo-token: ${{ steps.app-token.outputs.token }}
           stale-issue-message: |
             This issue has been marked as stale due to 60 days of inactivity. Please remove the stale label or leave a comment to keep it open.
             If no action is taken, it will be automatically closed in 7 days.
           stale-pr-message: |
-            This pull request has been marked as stale due to 60 days of inactivity. Please remove the stale label or leave a comment to prevent it from being closed.
+            This pull request has been marked as stale due to 60 days of inactivity. Please remove the stale label or leave a comment to keep it open.
             If no action is taken, it will be automatically closed in 7 days.
           close-issue-message: |
             This issue has been automatically closed after 7 days of inactivity following the stale status.
