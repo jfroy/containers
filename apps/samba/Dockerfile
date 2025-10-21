@@ -1,4 +1,4 @@
-FROM ubuntu:25.10 AS builder
+FROM debian:13.1-slim AS builder
 
 ARG TARGETARCH
 ARG VERSION
@@ -59,7 +59,7 @@ RUN ./configure \
     && make -j$(nproc) \
     && make DESTDIR=/out install
 
-FROM ubuntu:25.10
+FROM debian:13.1-slim
 WORKDIR /
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -70,15 +70,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libjansson4 \
         libpopt0 \
         libpython3.13 \
+        libtalloc2 \
         libtirpc3t64 \
         liburing2 \
         python3-pip \
         python3-yaml \
         wget \
     && rm -rf /var/lib/apt/lists/*
-RUN wget -q https://github.com/samba-in-kubernetes/sambacc/releases/download/v0.6/sambacc-0.6-py3-none-any.whl \
-    && pip3 install --break-system-packages sambacc-0.6-py3-none-any.whl \
-    && rm sambacc-0.6-py3-none-any.whl
+RUN wget -q https://github.com/samba-in-kubernetes/sambacc/releases/download/v0.7/sambacc-0.7-py3-none-any.whl \
+    && pip3 install --break-system-packages sambacc-0.7-py3-none-any.whl \
+    && rm sambacc-0.7-py3-none-any.whl
 COPY --from=builder /out/usr /usr
 COPY ./defaults/smb.conf /etc/samba/smb.conf
 

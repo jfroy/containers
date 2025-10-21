@@ -1,7 +1,7 @@
 target "docker-metadata-action" {}
 
 variable "VERSION" {
-  default = "4.22.1"
+  default = "4.23.1"
 }
 
 variable "SOURCE" {
