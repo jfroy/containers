@@ -34,8 +34,10 @@ RUN wget -q https://download.samba.org/pub/samba/stable/samba-${VERSION}.tar.gz 
     && tar xzf samba-${VERSION}.tar.gz
 
 WORKDIR /build/samba-${VERSION}
-# NOTE: Need to set PYTHONDIR and PYTHONARCHDIR during 'make install' because the logic in WAF to
-# autoconfigure the path is broken for DESTDIR (i.e. prefix) installs.
+# NOTE: Need to set PYTHONDIR and PYTHONARCHDIR because the logic in WAF to autoconfigure the path
+# is broken for DESTDIR (i.e. prefix) installs.
+ENV PYTHONDIR=/usr/local/lib/python3.13/dist-packages \
+    PYTHONARCHDIR=/usr/local/lib/python3.13/dist-packages
 RUN ./configure \
         --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
         --disable-cephfs \
@@ -60,7 +62,7 @@ RUN ./configure \
         --without-systemd \
         --without-winexe \
     && make -j$(nproc) \
-    && make DESTDIR=/out PYTHONDIR=/usr/local/lib/python3.13/dist-packages PYTHONARCHDIR=/usr/local/lib/python3.13/dist-packages install
+    && make DESTDIR=/out install
 
 FROM debian:13.1-slim
 WORKDIR /
