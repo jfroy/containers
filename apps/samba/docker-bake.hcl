@@ -2,7 +2,7 @@ target "docker-metadata-action" {}
 
 variable "VERSION" {
   // renovate: datasource=gitlab-tags depName=samba-team/samba
-  default = "4.24.0"
+  default = "4.24.1"
 }
 
 variable "SOURCE" {
