@@ -1,4 +1,4 @@
-FROM ubuntu:25.10 AS builder
+FROM ubuntu:26.04 AS builder
 
 ARG TARGETARCH
 ARG VERSION
@@ -39,7 +39,7 @@ RUN ./configure \
     && make -j$(nproc) \
     && make DESTDIR=/out install
 
-FROM ubuntu:25.10
+FROM ubuntu:26.04
 WORKDIR /
 
 RUN apt-get update && apt-get install -y --no-install-recommends \

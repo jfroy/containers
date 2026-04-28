@@ -1,4 +1,4 @@
-FROM ubuntu:25.10 AS builder
+FROM ubuntu:26.04 AS builder
 
 ARG TARGETARCH
 ARG VERSION
@@ -19,7 +19,7 @@ RUN meson setup -Dlauncher=false --prefix /usr build \
     && meson compile -C build \
     && meson install -C build --destdir /out
 
-FROM ubuntu:25.10
+FROM ubuntu:26.04
 WORKDIR /
 COPY --from=builder /out/usr /usr
 
