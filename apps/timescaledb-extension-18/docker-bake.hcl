@@ -1,12 +1,12 @@
 target "docker-metadata-action" {}
 
 variable "VERSION" {
-  // renovate: datasource=github-releases depName=influxdata/telegraf
-  default = "1.37.0"
+  // renovate: datasource=github-tags depName=timescale/timescaledb
+  default = "2.27.1"
 }
 
 variable "SOURCE" {
-  default = "https://github.com/influxdata/telegraf"
+  default = "https://github.com/timescale/timescaledb"
 }
 
 group "default" {
@@ -16,7 +16,8 @@ group "default" {
 target "image" {
   inherits = ["docker-metadata-action"]
   args = {
-    VERSION = "${VERSION}"
+    PG_MAJOR = "18"
+    EXT_VERSION = "${VERSION}"
   }
   labels = {
     "org.opencontainers.image.source" = "${SOURCE}"
