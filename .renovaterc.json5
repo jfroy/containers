@@ -7,8 +7,9 @@
       description: "Process Annotations in Docker Bake",
       managerFilePatterns: ["/(^|/)docker-bake\\.hcl$/"],
       matchStrings: [
-        "// renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\\n.+ = \"(?<currentValue>[^\"]+)\"",
+        'datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\\n.+ = "(?<currentValue>[^"]+)"',
       ],
+      datasourceTemplate: "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}",
       versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
     },
     {
@@ -18,6 +19,7 @@
       matchStrings: [
         "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\\n.+(:\\s|=)(&\\S+\\s)?(?<currentValue>\\S+)",
       ],
+      datasourceTemplate: "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}",
       versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
     },
   ],
@@ -54,11 +56,38 @@
       allowedVersions: "/3\\.23/",
     },
     {
+      description: ["Allowed Alpine Version for Postgres Base Images"],
+      matchDatasources: ["docker"],
+      matchPackageNames: ["/postgres/"],
+      allowedVersions: "/alpine3\\.23/",
+    },
+    {
       description: ["Allowed Python Version for Alpine Base Images"],
       matchDatasources: ["docker"],
       matchFileNames: ["**/Dockerfile"],
       matchPackageNames: ["/python/"],
       allowedVersions: "/3\\.14-alpine3\\.23/",
+    },
+    {
+      description: ["Allowed Python Version for Debian Base Images"],
+      matchDatasources: ["docker"],
+      matchFileNames: ["**/Dockerfile"],
+      matchPackageNames: ["/python/"],
+      allowedVersions: "/3\\.14-slim/",
+    },
+    {
+      description: ["Allowed Python Version for ESPHome Base Image"],
+      matchDatasources: ["docker"],
+      matchFileNames: ["apps/esphome/Dockerfile"],
+      matchPackageNames: ["/python/"],
+      allowedVersions: "/3\\.13-slim/",
+    },
+    {
+      description: ["Allowed Java Version for NZBHydra2 Base Image"],
+      matchDatasources: ["docker"],
+      matchFileNames: ["apps/nzbhydra2/Dockerfile"],
+      matchPackageNames: ["/amazoncorretto/"],
+      allowedVersions: "/17-alpine3\\.22/",
     },
     {
       "matchDatasources": ["gitlab-tags"],
