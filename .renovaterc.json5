@@ -26,6 +26,14 @@
   customDatasources: {},
   packageRules: [
     {
+      description: [
+        "Group the Go version: the go.mod directive (gomod) and the mise toolchain pin bump together in one PR",
+      ],
+      matchManagers: ["gomod", "mise"],
+      matchDepNames: ["go"],
+      groupName: "golang",
+    },
+    {
       description: ["Release Rules for App Updates"],
       addLabels: ["app/{{parentDir}}"],
       additionalBranchPrefix: "{{parentDir}}-",
@@ -53,20 +61,20 @@
       matchDatasources: ["docker"],
       matchFileNames: ["**/Dockerfile"],
       matchPackageNames: ["/alpine/"],
-      allowedVersions: "/3\\.23/",
+      allowedVersions: "/3\\.24/",
     },
     {
       description: ["Allowed Alpine Version for Postgres Base Images"],
       matchDatasources: ["docker"],
       matchPackageNames: ["/postgres/"],
-      allowedVersions: "/alpine3\\.23/",
+      allowedVersions: "/alpine3\\.24/",
     },
     {
       description: ["Allowed Python Version for Alpine Base Images"],
       matchDatasources: ["docker"],
       matchFileNames: ["**/Dockerfile"],
       matchPackageNames: ["/python/"],
-      allowedVersions: "/3\\.14-alpine3\\.23/",
+      allowedVersions: "/3\\.14-alpine3\\.24/",
     },
     {
       description: ["Allowed Python Version for Debian Base Images"],
@@ -90,9 +98,9 @@
       allowedVersions: "/17-alpine3\\.22/",
     },
     {
-      "matchDatasources": ["gitlab-tags"],
-      "matchPackageNames": ["samba-team/samba"],
-      "extractVersion": "^samba-(?<version>.+)$",
+      matchDatasources: ["gitlab-tags"],
+      matchPackageNames: ["samba-team/samba"],
+      extractVersion: "^samba-(?<version>.+)$",
     },
   ],
 }

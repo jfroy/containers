@@ -8,6 +8,7 @@ on:
       - main
     paths:
       - apps/**
+      - "!apps/**/*_test.go"
   workflow_dispatch:
     inputs:
       app:

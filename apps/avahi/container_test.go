@@ -8,5 +8,5 @@ import (
 
 func Test(t *testing.T) {
 	image := testhelpers.GetTestImage("ghcr.io/jfroy/avahi:rolling")
-	testhelpers.TestFileExists(t, image, "/usr/sbin/avahi-daemon", nil)
+	testhelpers.RequireFileExists(t, image, "/usr/sbin/avahi-daemon")
 }

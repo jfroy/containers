@@ -8,5 +8,5 @@ import (
 
 func Test(t *testing.T) {
 	image := testhelpers.GetTestImage("ghcr.io/jfroy/vuetorrent:rolling")
-	testhelpers.TestFileExists(t, image, "/vuetorrent/public/index.html", nil)
+	testhelpers.RequireFileExists(t, image, "/vuetorrent/public/index.html")
 }

@@ -8,6 +8,6 @@ import (
 
 func Test(t *testing.T) {
 	image := testhelpers.GetTestImage("ghcr.io/jfroy/samba:rolling")
-	testhelpers.TestFileExists(t, image, "/usr/local/bin/samba-container", nil)
-	testhelpers.TestFileExists(t, image, "/usr/sbin/smbd", nil)
+	testhelpers.RequireFileExists(t, image, "/usr/local/bin/samba-container")
+	testhelpers.RequireFileExists(t, image, "/usr/sbin/smbd")
 }

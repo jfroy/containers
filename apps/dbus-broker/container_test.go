@@ -8,5 +8,5 @@ import (
 
 func Test(t *testing.T) {
 	image := testhelpers.GetTestImage("ghcr.io/jfroy/dbus-broker:rolling")
-	testhelpers.TestFileExists(t, image, "/usr/bin/dbus-broker", nil)
+	testhelpers.RequireFileExists(t, image, "/usr/bin/dbus-broker")
 }
