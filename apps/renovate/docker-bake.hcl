@@ -12,7 +12,7 @@ variable "HELM_DOCS_VERSION" {
 
 variable "HELM_SCHEMA_VERSION" {
   // renovate: datasource=github-releases depName=dadav/helm-schema
-  default = "0.23.3"
+  default = "0.23.4"
 }
 
 variable "SOURCE" {
