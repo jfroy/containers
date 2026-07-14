@@ -1,4 +1,4 @@
-FROM debian:13.5-slim AS builder
+FROM debian:13.6-slim AS builder
 
 ARG TARGETARCH
 ARG VERSION
@@ -64,7 +64,7 @@ RUN ./configure \
     && make -j$(nproc) \
     && make DESTDIR=/out install
 
-FROM debian:13.5-slim
+FROM debian:13.6-slim
 WORKDIR /
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
