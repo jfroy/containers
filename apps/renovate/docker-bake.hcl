@@ -2,7 +2,7 @@ target "docker-metadata-action" {}
 
 variable "VERSION" {
   // renovate: datasource=docker depName=ghcr.io/renovatebot/renovate
-  default = "44.4.5"
+  default = "44.6.0"
 }
 
 variable "HELM_DOCS_VERSION" {
