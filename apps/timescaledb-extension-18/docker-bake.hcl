@@ -2,7 +2,7 @@ target "docker-metadata-action" {}
 
 variable "VERSION" {
   // renovate: datasource=github-tags depName=timescale/timescaledb
-  default = "2.29.1"
+  default = "2.29.2"
 }
 
 variable "SOURCE" {
