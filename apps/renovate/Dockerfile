@@ -1,4 +1,4 @@
-ARG VERSION=44.39.1
+ARG VERSION=44.39.2
 FROM ghcr.io/renovatebot/renovate:${VERSION}
 
 ARG HELM_DOCS_VERSION
