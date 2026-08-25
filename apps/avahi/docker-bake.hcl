@@ -1,6 +1,11 @@
 target "docker-metadata-action" {}
 
+variable "APP" {
+  default = "avahi"
+}
+
 variable "VERSION" {
+  // renovate: datasource=github-releases depName=avahi/avahi
   default = "0.8"
 }
 
@@ -25,6 +30,7 @@ target "image" {
 target "image-local" {
   inherits = ["image"]
   output = ["type=docker"]
+  tags = ["${APP}:${VERSION}"]
 }
 
 target "image-all" {

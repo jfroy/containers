@@ -1,0 +1,11 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/hadolint.json
+ignored:
+  - DL3002 # some images intentionally end as root (zfs, postgres extensions, artifact-only images)
+  - DL3003 # cd into a mktemp dir inside a RUN cannot be expressed as WORKDIR
+  - DL3018
+  - DL3013
+  - DL3008
+  - DL3066
+  - DL4006
+  - SC3060

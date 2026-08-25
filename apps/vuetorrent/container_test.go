@@ -3,10 +3,10 @@ package main
 import (
 	"testing"
 
-	"github.com/jfroy/containers/testhelpers"
+	helpers "github.com/jfroy/containers/tests"
 )
 
 func Test(t *testing.T) {
-	image := testhelpers.GetTestImage("ghcr.io/jfroy/vuetorrent:rolling")
-	testhelpers.RequireFileExists(t, image, "/vuetorrent/public/index.html")
+	image := helpers.GetTestImage("ghcr.io/jfroy/vuetorrent:rolling")
+	helpers.RequireFileExists(t, image, "/vuetorrent/public/index.html")
 }

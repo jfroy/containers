@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+
 FROM ubuntu:26.04 AS builder
 
 ARG TARGETARCH
@@ -36,7 +38,7 @@ RUN ./configure \
         --with-avahi-user=nobody \
         --with-avahi-group=nogroup \
         --with-distro=none \
-    && make -j$(nproc) \
+    && make -j"$(nproc)" \
     && make DESTDIR=/out install
 
 FROM ubuntu:26.04

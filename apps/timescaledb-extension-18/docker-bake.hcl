@@ -1,5 +1,9 @@
 target "docker-metadata-action" {}
 
+variable "APP" {
+  default = "timescaledb-extension-18"
+}
+
 variable "VERSION" {
   // renovate: datasource=github-tags depName=timescale/timescaledb
   default = "2.29.2"
@@ -27,6 +31,7 @@ target "image" {
 target "image-local" {
   inherits = ["image"]
   output = ["type=docker"]
+  tags = ["${APP}:${VERSION}"]
 }
 
 target "image-all" {

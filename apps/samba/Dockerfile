@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+
 FROM debian:13.6-slim AS builder
 
 ARG TARGETARCH
@@ -61,7 +63,7 @@ RUN ./configure \
         --without-regedit \
         --without-systemd \
         --without-winexe \
-    && make -j$(nproc) \
+    && make -j"$(nproc)" \
     && make DESTDIR=/out install
 
 FROM debian:13.6-slim
@@ -83,7 +85,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         wget \
     && rm -rf /var/lib/apt/lists/*
 RUN wget -q https://github.com/samba-in-kubernetes/sambacc/releases/download/v0.7/sambacc-0.7-py3-none-any.whl \
-    && pip3 install --break-system-packages sambacc-0.7-py3-none-any.whl \
+    && pip3 install --no-cache-dir --break-system-packages sambacc-0.7-py3-none-any.whl \
     && rm sambacc-0.7-py3-none-any.whl
 COPY --from=builder /out/usr /usr
 COPY ./defaults/smb.conf /etc/samba/smb.conf

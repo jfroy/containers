@@ -3,106 +3,29 @@
 name: Retry Release
 
 on:
-  schedule:
-    - cron: 30 1 * * *
-  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - Release
+    types:
+      - completed
 
 permissions:
   contents: read
 
 jobs:
-  apps:
-    name: Get App Inventory
-    runs-on: ubuntu-24.04
-    outputs:
-      apps: ${{ steps.inventory.outputs.apps }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      - name: Get App Inventory
-        uses: ./.github/actions/app-inventory
-        id: inventory
-
   retry:
-    if: ${{ needs.apps.outputs.apps != '[]' }}
+    if: >-
+      github.event.workflow_run.conclusion == 'failure'
+      && github.event.workflow_run.event == 'push'
+      && github.event.workflow_run.run_attempt == 1
     name: Retry Release
     runs-on: ubuntu-24.04
-    needs:
-      - apps
-    strategy:
-      matrix:
-        app: ${{ fromJSON(needs.apps.outputs.apps) }}
-      max-parallel: 4
-      fail-fast: false
+    permissions:
+      actions: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      - name: Generate Token
-        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
-        id: app-token
-        with:
-          client-id: ${{ secrets.BOT_CLIENT_ID }}
-          private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
-          permission-actions: write
-          permission-packages: read
-          permission-pull-requests: read
-
-      - name: Install Cosign
-        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
-
-      - name: Install regctl
-        uses: regclient/actions/regctl-installer@78eb729dbdb4ef6480e85ff697b4410e22112583 # main
-
-      - name: Get Bake Options
-        uses: ./.github/actions/app-options
-        id: app-options
-        with:
-          app: ${{ matrix.app }}
-
-      - name: Get App Registry Version
-        id: registry
+      - name: Re-run Failed Jobs
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-          REPO_OWNER: ${{ github.repository_owner }}
-          APP: ${{ matrix.app }}
-        run: |
-          if ! version=$(regctl image inspect "ghcr.io/${REPO_OWNER}/${APP}:rolling" \
-              | jq --raw-output '.config.Labels["org.opencontainers.image.version"]' 2>/dev/null) || [[ -z "${version}" ]];
-          then
-              echo "Failed to get registry version for ${APP}"
-              exit 1
-          fi
-          echo "version=${version}" >> "$GITHUB_OUTPUT"
-
-      - if: ${{ steps.app-options.outputs.version != steps.registry.outputs.version }}
-        name: Find Pull Request
-        uses: juliangruber/find-pull-request-action@92b38d91ef26fd0f47374257f50e78432359a45f # v1.11.1
-        id: find-pull-request
-        with:
-          github-token: ${{ steps.app-token.outputs.token }}
-          labels: app/${{ matrix.app }}
-          state: open
-
-      - if: ${{ steps.find-pull-request.outputs.number != '' }}
-        name: Retry Release
-        env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: |- # zizmor: ignore[template-injection]
-          gh workflow run release.yaml \
-              --repo ${{ github.repository }} \
-              -f app=${{ matrix.app }} \
-              -f release=true
-
-          {
-              echo '## Retrying Release'
-              echo
-              echo '| App Name | Actual Version | Expected Version |'
-              echo '|----------|----------------|------------------|'
-              echo '| `${{ matrix.app }}` | `${{ steps.registry.outputs.version }}` | `${{ steps.app-options.outputs.version }}` |'
-          } >> $GITHUB_STEP_SUMMARY
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: gh run rerun "$RUN_ID" --repo "$REPO" --failed

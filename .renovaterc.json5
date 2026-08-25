@@ -26,14 +26,6 @@
   customDatasources: {},
   packageRules: [
     {
-      description: [
-        "Group the Go version: the go.mod directive (gomod) and the mise toolchain pin bump together in one PR",
-      ],
-      matchManagers: ["gomod", "mise"],
-      matchDepNames: ["go"],
-      groupName: "golang",
-    },
-    {
       description: ["Release Rules for App Updates"],
       addLabels: ["app/{{parentDir}}"],
       additionalBranchPrefix: "{{parentDir}}-",
@@ -47,7 +39,6 @@
       description: ["Auto-merge App Updates"],
       matchFileNames: ["**/docker-bake.hcl"],
       automerge: true,
-      automergeType: "pr",
       ignoreTests: false,
     },
     {
@@ -91,11 +82,10 @@
       allowedVersions: "/3\\.13-slim/",
     },
     {
-      description: ["Allowed Java Version for NZBHydra2 Base Image"],
-      matchDatasources: ["docker"],
-      matchFileNames: ["apps/nzbhydra2/Dockerfile"],
-      matchPackageNames: ["/amazoncorretto/"],
-      allowedVersions: "/17-alpine3\\.22/",
+      description: ["Strip the v prefix from tags of GitHub sourced apps"],
+      matchDatasources: ["github-releases"],
+      matchPackageNames: ["avahi/avahi", "bus1/dbus-broker", "kubernetes/kubernetes"],
+      extractVersion: "^v(?<version>.+)$",
     },
     {
       matchDatasources: ["gitlab-tags"],

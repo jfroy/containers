@@ -3,10 +3,10 @@ package main
 import (
 	"testing"
 
-	"github.com/jfroy/containers/testhelpers"
+	helpers "github.com/jfroy/containers/tests"
 )
 
 func Test(t *testing.T) {
-	image := testhelpers.GetTestImage("ghcr.io/jfroy/dbus-broker:rolling")
-	testhelpers.RequireFileExists(t, image, "/usr/bin/dbus-broker")
+	image := helpers.GetTestImage("ghcr.io/jfroy/dbus-broker:rolling")
+	helpers.RequireFileExists(t, image, "/usr/bin/dbus-broker")
 }

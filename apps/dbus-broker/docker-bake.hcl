@@ -1,6 +1,11 @@
 target "docker-metadata-action" {}
 
+variable "APP" {
+  default = "dbus-broker"
+}
+
 variable "VERSION" {
+  // renovate: datasource=github-releases depName=bus1/dbus-broker
   default = "36"
 }
 
@@ -25,6 +30,7 @@ target "image" {
 target "image-local" {
   inherits = ["image"]
   output = ["type=docker"]
+  tags = ["${APP}:${VERSION}"]
 }
 
 target "image-all" {
