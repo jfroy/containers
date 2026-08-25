@@ -1,5 +1,9 @@
 target "docker-metadata-action" {}
 
+variable "APP" {
+  default = "telegraf-zfs"
+}
+
 variable "VERSION" {
   // renovate: datasource=github-releases depName=influxdata/telegraf
   default = "1.39.3"
@@ -26,6 +30,7 @@ target "image" {
 target "image-local" {
   inherits = ["image"]
   output = ["type=docker"]
+  tags = ["${APP}:${VERSION}"]
 }
 
 target "image-all" {

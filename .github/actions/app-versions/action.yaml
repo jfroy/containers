@@ -53,7 +53,7 @@ runs:
       env:
         UPSTREAM_VERSION: ${{ inputs.upstream-version }}
       with:
-        script: |-
+        script: |
           const semver = require('semver');
 
           // Strip the v prefix and pre-release info

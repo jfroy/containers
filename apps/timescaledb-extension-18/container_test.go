@@ -3,11 +3,11 @@ package main
 import (
 	"testing"
 
-	"github.com/jfroy/containers/testhelpers"
+	helpers "github.com/jfroy/containers/tests"
 )
 
 func Test(t *testing.T) {
-	image := testhelpers.GetTestImage("ghcr.io/jfroy/timescaledb-extension-18:rolling")
-	testhelpers.RequireFileExists(t, image, "/lib/timescaledb.so")
-	testhelpers.RequireFileExists(t, image, "/share/extension/timescaledb.control")
+	image := helpers.GetTestImage("ghcr.io/jfroy/timescaledb-extension-18:rolling")
+	helpers.RequireFileExists(t, image, "/lib/timescaledb.so")
+	helpers.RequireFileExists(t, image, "/share/extension/timescaledb.control")
 }

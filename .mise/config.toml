@@ -1,16 +1,18 @@
 [settings]
 experimental = true
-unix_default_inline_shell_args = "bash -c -o errexit -o pipefail -o nounset"
 
 [tools]
-gh = "2.97.0"
-go = "1.26.6"
+actionlint = "1.7.12"
+gh = "2.98.0"
+go = "1.27.0"
+hadolint = "2.15.1"
 jq = "1.8.2"
-lefthook = "2.1.10"
+lefthook = "2.1.11"
 node = "26.7.0"
 oxfmt = "0.64.0"
+regctl = "0.11.5"
 shellcheck = "0.11.0"
-yq = "4.53.3"
+yq = "4.53.6"
 zizmor = "1.29.0"
 
 [tasks.local-build]
@@ -20,7 +22,7 @@ usage = '''
 arg "<app>"
 '''
 run = '''
-rsync -aqIP {{config_root}}/include/ {{config_root}}/apps/"$usage_app"/ .
+rsync -aqIP {{config_root}}/apps/"$usage_app"/ .
 docker buildx bake --no-cache --metadata-file docker-bake.json --set=*.output=type=docker --load
 TEST_IMAGE="$(jq -r '."image-local"."image.name" | sub("^docker.io/library/"; "")' docker-bake.json)" go test -v {{config_root}}/apps/"$usage_app"/...
 '''

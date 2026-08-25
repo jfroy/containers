@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+
 ARG BASE=ghcr.io/cloudnative-pg/postgresql:18-minimal-trixie
 FROM $BASE AS builder
 

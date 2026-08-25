@@ -1,5 +1,9 @@
 target "docker-metadata-action" {}
 
+variable "APP" {
+  default = "vuetorrent"
+}
+
 variable "VERSION" {
   // renovate: datasource=github-releases depName=VueTorrent/VueTorrent
   default = "2.35.0"
@@ -26,6 +30,7 @@ target "image" {
 target "image-local" {
   inherits = ["image"]
   output = ["type=docker"]
+  tags = ["${APP}:${VERSION}"]
 }
 
 target "image-all" {
