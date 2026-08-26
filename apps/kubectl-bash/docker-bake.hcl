@@ -6,7 +6,7 @@ variable "APP" {
 
 variable "VERSION" {
   // renovate: datasource=github-releases depName=kubernetes/kubernetes
-  default = "1.36.4"
+  default = "1.37.0"
 }
 
 variable "SOURCE" {
