@@ -6,7 +6,7 @@ variable "APP" {
 
 variable "VERSION" {
   // renovate: datasource=docker depName=ghcr.io/renovatebot/renovate
-  default = "44.46.6"
+  default = "44.46.7"
 }
 
 variable "HELM_DOCS_VERSION" {
