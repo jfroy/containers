@@ -88,6 +88,18 @@
       extractVersion: "^v(?<version>.+)$",
     },
     {
+      description: ["Strip the kustomize/v prefix from kustomize release tags"],
+      matchDatasources: ["github-releases"],
+      matchPackageNames: ["kubernetes-sigs/kustomize"],
+      extractVersion: "^kustomize/v(?<version>.+)$",
+    },
+    {
+      description: ["Strip the jq- prefix from jq release tags"],
+      matchDatasources: ["github-releases"],
+      matchPackageNames: ["jqlang/jq"],
+      extractVersion: "^jq-(?<version>.+)$",
+    },
+    {
       matchDatasources: ["gitlab-tags"],
       matchPackageNames: ["samba-team/samba"],
       extractVersion: "^samba-(?<version>.+)$",
