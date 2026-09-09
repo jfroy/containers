@@ -5,8 +5,8 @@ variable "APP" {
 }
 
 variable "VERSION" {
-  // renovate: datasource=docker depName=ghcr.io/anomalyco/opencode
-  default = "1.18.30"
+  // renovate: datasource=npm depName=@opencode/cli versioning=loose
+  default = "0.0.0-beta-19398"
 }
 
 variable "AGE_VERSION" {
@@ -100,6 +100,7 @@ target "image" {
     KUBECONFORM_VERSION = "${KUBECONFORM_VERSION}"
     KUBECTL_VERSION     = "${KUBECTL_VERSION}"
     KUSTOMIZE_VERSION   = "${KUSTOMIZE_VERSION}"
+    OPENCODE_VERSION    = "${VERSION}"
     SOPS_VERSION        = "${SOPS_VERSION}"
     TALHELPER_VERSION   = "${TALHELPER_VERSION}"
     TALOSCTL_VERSION    = "${TALOSCTL_VERSION}"

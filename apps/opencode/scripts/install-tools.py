@@ -3,9 +3,16 @@
 
 Every tool is fetched from its upstream release at the version pinned in
 ``docker-bake.hcl`` (passed in as a ``<NAME>_VERSION`` build arg, and therefore
-visible here as an environment variable) and checked against the checksum the
-publisher ships next to the asset. The one exception is documented on the tool
-itself.
+visible here as an environment variable) and checked against the digest the
+publisher ships alongside the asset. The one exception is documented on the
+tool itself.
+
+opencode2 is taken straight from its per-platform npm package rather than
+through ``@opencode/cli``: that launcher package picks a platform build by
+probing the *build* machine (``os.arch()``, ``/etc/alpine-release``, and AVX2
+from ``/proc/cpuinfo``) and then runs the binary to verify it, which would bake
+the CI runner's CPU into the image and force cross-arch stages under emulation.
+The per-platform packages carry no install scripts, just the binary.
 
 Nothing downloaded here is executed: this stage runs on the *build* platform
 while the binaries are for ``--arch``, so they may not even be runnable.
@@ -14,18 +21,23 @@ while the binaries are for ``--arch``, so they may not even be runnable.
 from __future__ import annotations
 
 import argparse
+import base64
+import binascii
 import hashlib
 import io
+import json
 import os
 import re
 import sys
 import tarfile
 import urllib.error
+import urllib.parse
 import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
 
 ARCHES = ("amd64", "arm64")
+NPM_REGISTRY = "https://registry.npmjs.org"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 USER_AGENT = "jfroy-containers-opencode-build"
 
@@ -43,6 +55,14 @@ class Checksum:
 
 
 @dataclass(frozen=True)
+class Digest:
+    """An expected hash that is already known, rather than fetched from a file."""
+
+    algorithm: str
+    value: str  # lowercase hex
+
+
+@dataclass(frozen=True)
 class Tool:
     """One binary (or set of binaries) to install."""
 
@@ -51,6 +71,7 @@ class Tool:
     url: str
     binaries: tuple[str, ...] = ()
     checksum: Checksum | None = None
+    digest: Digest | None = None
     # Set when upstream publishes no checksum we can consume; explains why.
     unverified_reason: str | None = None
 
@@ -60,7 +81,7 @@ class Tool:
 
     @property
     def is_archive(self) -> bool:
-        return self.url.endswith(".tar.gz")
+        return self.url.endswith((".tar.gz", ".tgz"))
 
 
 def version(name: str) -> str:
@@ -76,7 +97,29 @@ def bare(v: str) -> str:
     return v[1:] if v.startswith("v") else v
 
 
+def npm_release(package: str, wanted: str) -> tuple[str, Digest]:
+    """Resolve an npm package version to its tarball URL and published digest.
+
+    ``dist.integrity`` is a Subresource Integrity string (``<algorithm>-<base64
+    digest>``) and is the strongest thing the registry publishes per version.
+    """
+    url = f"{NPM_REGISTRY}/{urllib.parse.quote(package, safe='')}/{wanted}"
+    try:
+        metadata = json.loads(fetch(url))
+        dist = metadata["dist"]
+        algorithm, _, encoded = str(dist["integrity"]).partition("-")
+        return dist["tarball"], Digest(algorithm, base64.b64decode(encoded).hex())
+    except (KeyError, ValueError, binascii.Error) as err:
+        raise SystemExit(f"{package}@{wanted}: unusable registry metadata: {err}") from err
+
+
 def tools(arch: str) -> list[Tool]:
+    """Build the install table.
+
+    This reaches the network once, for the npm registry lookup opencode2 needs
+    to turn a version into a tarball URL and digest.
+    """
+    opencode = version("OPENCODE")
     gh = version("GH")
     kubectl = version("KUBECTL")
     flux = version("FLUX")
@@ -125,7 +168,18 @@ def tools(arch: str) -> list[Tool]:
     kubectl_url = f"https://dl.k8s.io/release/v{bare(kubectl)}/bin/linux/{arch}/kubectl"
     yq_url = f"https://github.com/mikefarah/yq/releases/download/{yq}/yq_linux_{arch}"
 
+    # The x64 build requires AVX2; "-baseline-musl" is the fallback for older CPUs.
+    opencode_package = f"@opencode/cli-linux-{'x64' if arch == 'amd64' else 'arm64'}-musl"
+    opencode_url, opencode_digest = npm_release(opencode_package, opencode)
+
     return [
+        Tool(
+            name="opencode2",
+            version=opencode,
+            url=opencode_url,
+            binaries=("opencode2",),
+            digest=opencode_digest,
+        ),
         Tool(
             name="gh",
             version=gh,
@@ -288,17 +342,22 @@ def parse_yq_sha256(checksums: str, order: str, key: str) -> str:
     raise SystemExit(f"no row for {key!r} in yq checksums")
 
 
-def expected_sha256(tool: Tool) -> str | None:
+def expected_digest(tool: Tool) -> Digest | None:
+    if tool.digest is not None:
+        return tool.digest
     if tool.checksum is None:
         return None
     if tool.name == "yq":
         order_url = tool.checksum.url + "_hashes_order"
-        return parse_yq_sha256(
-            fetch(tool.checksum.url).decode(),
-            fetch(order_url).decode(),
-            tool.checksum.key or "",
+        return Digest(
+            "sha256",
+            parse_yq_sha256(
+                fetch(tool.checksum.url).decode(),
+                fetch(order_url).decode(),
+                tool.checksum.key or "",
+            ),
         )
-    return parse_sha256(fetch(tool.checksum.url).decode(), tool.checksum.key)
+    return Digest("sha256", parse_sha256(fetch(tool.checksum.url).decode(), tool.checksum.key))
 
 
 def extract(tool: Tool, payload: bytes) -> dict[str, bytes]:
@@ -332,19 +391,23 @@ def install(tool: Tool, dest: Path) -> None:
     print(f"    {tool.url}", flush=True)
 
     payload = fetch(tool.url)
-    actual = hashlib.sha256(payload).hexdigest()
-    wanted = expected_sha256(tool)
+    wanted = expected_digest(tool)
+    algorithm = wanted.algorithm if wanted else "sha256"
+    actual = hashlib.new(algorithm, payload).hexdigest()
 
     if wanted is None:
-        print(f"    sha256 {actual} (unverified: {tool.unverified_reason})", flush=True)
-    elif actual != wanted:
+        print(
+            f"    {algorithm} {actual} (unverified: {tool.unverified_reason})",
+            flush=True,
+        )
+    elif actual != wanted.value:
         raise SystemExit(
-            f"{tool.name}: checksum mismatch\n"
-            f"  expected {wanted}\n"
+            f"{tool.name}: {algorithm} mismatch\n"
+            f"  expected {wanted.value}\n"
             f"  got      {actual}"
         )
     else:
-        print(f"    sha256 {actual} ok", flush=True)
+        print(f"    {algorithm} {actual} ok", flush=True)
 
     for name, contents in extract(tool, payload).items():
         path = dest / name
