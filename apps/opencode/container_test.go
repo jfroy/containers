@@ -14,7 +14,7 @@ import (
 // build platform and dropped into a musl base, so running them is what catches
 // a wrong-arch or dynamically linked download.
 var binaries = map[string]string{
-	"/usr/local/bin/opencode":    "opencode --version",
+	"/usr/local/bin/opencode2":   "opencode2 --version",
 	"/usr/bin/git":               "git --version",
 	"/usr/local/bin/gh":          "gh --version",
 	"/usr/local/bin/kubectl":     "kubectl version --client",

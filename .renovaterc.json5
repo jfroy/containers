@@ -88,6 +88,12 @@
       extractVersion: "^v(?<version>.+)$",
     },
     {
+      description: ["Follow the opencode2 beta dist-tag; its versions are not semver"],
+      matchDatasources: ["npm"],
+      matchPackageNames: ["@opencode/cli"],
+      followTag: "beta",
+    },
+    {
       description: ["Strip the kustomize/v prefix from kustomize release tags"],
       matchDatasources: ["github-releases"],
       matchPackageNames: ["kubernetes-sigs/kustomize"],
