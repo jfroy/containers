@@ -6,7 +6,7 @@ variable "APP" {
 
 variable "VERSION" {
   // renovate: datasource=npm depName=@opencode/cli versioning=loose
-  default = "0.0.0-beta-19398"
+  default = "0.0.0-beta-19425"
 }
 
 variable "AGE_VERSION" {
