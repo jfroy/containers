@@ -26,7 +26,15 @@ func GetTestImage(defaultImage string) string {
 
 // ContainerConfig holds optional container configuration
 type ContainerConfig struct {
-	Env map[string]string // Environment variables to set in the container
+	Env   map[string]string // Environment variables to set in the container
+	Files []FileToCopy      // Host files to place in the container before it starts
+}
+
+// FileToCopy describes a host file to place inside the container
+type FileToCopy struct {
+	HostPath      string // Path on the host, relative to the test's package directory
+	ContainerPath string // Absolute destination path inside the container
+	Mode          int64  // File mode; defaults to 0o644 when zero
 }
 
 // applyContainerConfig applies optional container configuration
@@ -39,6 +47,22 @@ func applyContainerConfig(config *ContainerConfig) []testcontainers.ContainerCus
 
 	if len(config.Env) > 0 {
 		opts = append(opts, testcontainers.WithEnv(config.Env))
+	}
+
+	if len(config.Files) > 0 {
+		files := make([]testcontainers.ContainerFile, 0, len(config.Files))
+		for _, f := range config.Files {
+			mode := f.Mode
+			if mode == 0 {
+				mode = 0o644
+			}
+			files = append(files, testcontainers.ContainerFile{
+				HostFilePath:      f.HostPath,
+				ContainerFilePath: f.ContainerPath,
+				FileMode:          mode,
+			})
+		}
+		opts = append(opts, testcontainers.WithFiles(files...))
 	}
 
 	return opts
