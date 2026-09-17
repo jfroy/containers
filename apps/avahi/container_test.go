@@ -10,6 +10,11 @@ import (
 func Test(t *testing.T) {
 	image := helpers.GetTestImage("ghcr.io/jfroy/avahi:rolling")
 	helpers.RequireFileExists(t, image, "/usr/sbin/avahi-daemon")
+
+	t.Run("runnable", func(t *testing.T) {
+		helpers.RequireCommandSucceeds(t, image, nil, "/usr/sbin/avahi-daemon", "--version")
+	})
+
 	t.Run("starts up with production flags", func(t *testing.T) {
 		config := &helpers.ContainerConfig{
 			Files: []helpers.FileToCopy{{

@@ -46,8 +46,9 @@ FROM ubuntu:26.04
 WORKDIR /
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        libdbus-1-3 \
+        libcap2 \
         libdaemon0 \
+        libdbus-1-3 \
         libexpat1 \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /out/usr /usr
