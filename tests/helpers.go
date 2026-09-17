@@ -28,6 +28,7 @@ func GetTestImage(defaultImage string) string {
 type ContainerConfig struct {
 	Env   map[string]string // Environment variables to set in the container
 	Files []FileToCopy      // Host files to place in the container before it starts
+	Tmpfs map[string]string // Tmpfs mounts, keyed by container path, valued by mount options (e.g. "rw,mode=1777")
 }
 
 // FileToCopy describes a host file to place inside the container
@@ -63,6 +64,10 @@ func applyContainerConfig(config *ContainerConfig) []testcontainers.ContainerCus
 			})
 		}
 		opts = append(opts, testcontainers.WithFiles(files...))
+	}
+
+	if len(config.Tmpfs) > 0 {
+		opts = append(opts, testcontainers.WithTmpfs(config.Tmpfs))
 	}
 
 	return opts
@@ -187,4 +192,39 @@ func RequireCommandSucceeds(t *testing.T, image string, config *ContainerConfig,
 	ctx := t.Context()
 	container := runContainer(t, ctx, image, opts...)
 	requireExitZero(t, ctx, container, fmt.Sprintf("command '%s %v' should succeed", entrypoint, args))
+}
+
+// DaemonStartupConfig holds the configuration for testing a long-running daemon container.
+type DaemonStartupConfig struct {
+	LogPattern string        // Regexp the container's stdout/stderr must match to prove it reached a healthy running state.
+	Timeout    time.Duration // Startup timeout for LogPattern to appear; 0 uses the wait library's default (60s).
+}
+
+// RequireDaemonStartsUp starts a long-running daemon container using the image's own
+// ENTRYPOINT/CMD (or overrides from containerConfig), waits for a log line matching
+// LogPattern to prove it reached a healthy running state, and then asserts the container
+// is still running.
+func RequireDaemonStartsUp(t *testing.T, image string, daemonConfig DaemonStartupConfig, containerConfig *ContainerConfig) {
+	t.Helper()
+
+	require.NotEmpty(t, daemonConfig.LogPattern, "DaemonStartupConfig.LogPattern must be set")
+
+	waitStrategy := wait.ForLog(daemonConfig.LogPattern).AsRegexp()
+	if daemonConfig.Timeout > 0 {
+		waitStrategy = waitStrategy.WithStartupTimeout(daemonConfig.Timeout)
+	}
+
+	opts := []testcontainers.ContainerCustomizer{
+		testcontainers.WithWaitStrategy(waitStrategy),
+	}
+	opts = append(opts, applyContainerConfig(containerConfig)...)
+
+	ctx := t.Context()
+	container := runContainer(t, ctx, image, opts...)
+
+	state, err := container.State(ctx)
+	require.NoError(t, err)
+	require.True(t, state.Running,
+		"container should still be running after logging %q (status %q, exit code %d)",
+		daemonConfig.LogPattern, state.Status, state.ExitCode)
 }

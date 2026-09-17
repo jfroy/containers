@@ -8,6 +8,7 @@ ARG VERSION
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     ca-certificates \
+    libcap-dev \
     libdaemon-dev \
     libdbus-1-dev \
     libexpat1-dev \
