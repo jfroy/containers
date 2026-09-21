@@ -11,29 +11,24 @@
 // Resolving the specifiers instead of importing them keeps this offline, fast
 // and free of module side effects. Resolution is the exact step that failed.
 //
-// Usage: node check-bundle-imports.mjs <app-root>   (e.g. /usr/local/renovate)
+// Usage: node --experimental-vm-modules check-bundle-imports.mjs <app-root>
 
 import { existsSync } from "node:fs";
 import { readFile, readdir } from "node:fs/promises";
 import { builtinModules } from "node:module";
 import path from "node:path";
 import process from "node:process";
+import { SourceTextModule } from "node:vm";
 
 // The scan must never pass by finding nothing: a build change that rewrites
 // external imports would otherwise silently turn this check into a no-op.
 const minPackages = 20;
 
 // Packages expected to be absent, e.g. an optional dependency the image
-// deliberately does not install. Add entries with a reason, or to silence a
-// specifier the patterns below picked up out of a string literal.
+// deliberately does not install. Add entries with a reason.
 const ignored = new Set();
 
 const builtins = new Set(builtinModules);
-
-// `import ... from "x"` / `export ... from "x"`, and the bare `import "x"` form.
-// Static specifiers only: those are the ones Node resolves eagerly while linking
-// the module graph, which is how a missing package takes the process down.
-const patterns = [/\bfrom\s*["']([^"']+)["']/g, /\bimport\s+["']([^"']+)["']/g];
 
 function isExternal(specifier) {
   if (specifier === "" || specifier.startsWith(".") || specifier.startsWith("/")) {
@@ -114,21 +109,23 @@ for await (const file of bundleFiles(bundle)) {
   const source = await readFile(file, "utf8");
   const dir = path.dirname(file);
 
-  for (const pattern of patterns) {
-    for (const [, specifier] of source.matchAll(pattern)) {
-      if (!isExternal(specifier)) {
-        continue;
-      }
+  // Parse without linking or evaluating: comments, strings, and dynamic imports
+  // are not static dependencies. Regexes mistook "from 'oldLabels'" in a comment
+  // for an import and rejected otherwise healthy images.
+  const module = new SourceTextModule(source, { identifier: file });
+  for (const { specifier } of module.moduleRequests) {
+    if (!isExternal(specifier)) {
+      continue;
+    }
 
-      const pkg = packageOf(specifier);
-      if (builtins.has(pkg) || ignored.has(pkg)) {
-        continue;
-      }
+    const pkg = packageOf(specifier);
+    if (builtins.has(pkg) || ignored.has(pkg)) {
+      continue;
+    }
 
-      packages.add(pkg);
-      if (!missing.has(pkg) && !isInstalled(dir, pkg)) {
-        missing.set(pkg, file);
-      }
+    packages.add(pkg);
+    if (!missing.has(pkg) && !isInstalled(dir, pkg)) {
+      missing.set(pkg, file);
     }
   }
 }

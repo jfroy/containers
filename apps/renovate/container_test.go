@@ -61,6 +61,16 @@ func Test(t *testing.T) {
 				Mode:          0o644,
 			}},
 		}
-		helpers.RequireCommandSucceeds(t, image, config, nodeBin, checkScript, appRoot)
+		helpers.RequireCommandSucceeds(t, image, config, nodeBin, "--experimental-vm-modules", checkScript, appRoot)
+	})
+
+	t.Run("import checker regression", func(t *testing.T) {
+		config := &helpers.ContainerConfig{
+			Files: []helpers.FileToCopy{
+				{HostPath: "testdata/check-bundle-imports.mjs", ContainerPath: checkScript},
+				{HostPath: "testdata/check-bundle-imports.test.mjs", ContainerPath: "/tmp/check-bundle-imports.test.mjs"},
+			},
+		}
+		helpers.RequireCommandSucceeds(t, image, config, nodeBin, "--test", "/tmp/check-bundle-imports.test.mjs")
 	})
 }
