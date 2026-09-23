@@ -46,7 +46,7 @@ variable "KUBECONFORM_VERSION" {
 
 variable "KUBECTL_VERSION" {
   // renovate: datasource=github-releases depName=kubernetes/kubernetes
-  default = "1.37.0"
+  default = "1.37.1"
 }
 
 variable "KUSTOMIZE_VERSION" {
