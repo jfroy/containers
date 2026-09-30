@@ -51,7 +51,7 @@ variable "KUBECTL_VERSION" {
 
 variable "KUSTOMIZE_VERSION" {
   // renovate: datasource=github-releases depName=kubernetes-sigs/kustomize
-  default = "5.8.1"
+  default = "5.8.2"
 }
 
 variable "SOPS_VERSION" {
