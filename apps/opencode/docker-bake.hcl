@@ -71,7 +71,7 @@ variable "TALOSCTL_VERSION" {
 
 variable "TASK_VERSION" {
   // renovate: datasource=github-releases depName=go-task/task
-  default = "v3.53.1"
+  default = "v3.54.0"
 }
 
 variable "YQ_VERSION" {
