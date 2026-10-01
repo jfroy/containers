@@ -6,7 +6,7 @@ variable "APP" {
 
 variable "VERSION" {
   // renovate: datasource=github-releases depName=VueTorrent/VueTorrent
-  default = "2.36.0"
+  default = "2.36.1"
 }
 
 variable "SOURCE" {
