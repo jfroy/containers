@@ -6,7 +6,7 @@ variable "APP" {
 
 variable "VERSION" {
   // renovate: datasource=github-releases depName=influxdata/telegraf
-  default = "1.40.1"
+  default = "1.40.2"
 }
 
 variable "SOURCE" {
