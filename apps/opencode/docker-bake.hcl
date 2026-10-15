@@ -31,7 +31,7 @@ variable "GH_VERSION" {
 
 variable "HELM_VERSION" {
   // renovate: datasource=github-releases depName=helm/helm
-  default = "v4.3.0"
+  default = "v4.3.1"
 }
 
 variable "JQ_VERSION" {
