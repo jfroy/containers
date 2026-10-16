@@ -66,7 +66,7 @@ variable "TALHELPER_VERSION" {
 
 variable "TALOSCTL_VERSION" {
   // renovate: datasource=github-releases depName=siderolabs/talos
-  default = "v1.14.2"
+  default = "v1.14.3"
 }
 
 variable "TASK_VERSION" {
