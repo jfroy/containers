@@ -6,7 +6,7 @@ variable "APP" {
 
 variable "VERSION" {
   // renovate: datasource=gitlab-tags depName=samba-team/samba
-  default = "4.25.0"
+  default = "4.25.1"
 }
 
 variable "SOURCE" {
