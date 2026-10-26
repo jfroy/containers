@@ -21,7 +21,7 @@ variable "FLATE_VERSION" {
 
 variable "FLUX_VERSION" {
   // renovate: datasource=github-releases depName=fluxcd/flux2
-  default = "v2.9.6"
+  default = "v2.10.0"
 }
 
 variable "GH_VERSION" {
