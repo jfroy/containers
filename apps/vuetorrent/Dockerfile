@@ -9,7 +9,7 @@ USER root
 
 #hadolint ignore=DL3018,DL3059
 RUN \
-    apk add --no-cache \
+    apk add --no-cache --upgrade \
         bash \
         ca-certificates \
         curl \

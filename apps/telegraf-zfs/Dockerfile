@@ -12,7 +12,7 @@ LABEL internal.flatops.image.target_architecture=$TARGETARCH
 LABEL internal.flatops.image.target_os=$TARGETOS
 LABEL org.opencontainers.image.source="https://github.com/influxdata/telegraf"
 
-RUN apk add --no-cache zfs
+RUN apk add --no-cache --upgrade ca-certificates zfs
 RUN wget -q "https://dl.influxdata.com/telegraf/releases/telegraf-${VERSION}_linux_${TARGETARCH}.tar.gz" \
     && tar xvzf telegraf-${VERSION}_linux_${TARGETARCH}.tar.gz \
     && mv telegraf-${VERSION}/usr/bin/telegraf /usr/bin/telegraf \

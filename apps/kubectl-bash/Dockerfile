@@ -4,7 +4,7 @@ FROM docker.io/library/alpine:3.24
 ARG VERSION
 ARG TARGETARCH
 
-RUN apk add --no-cache bash \
+RUN apk add --no-cache --upgrade bash ca-certificates \
     && wget -q -O /usr/local/bin/kubectl "https://dl.k8s.io/release/v$VERSION/bin/linux/$TARGETARCH/kubectl" \
     && chmod +x  /usr/local/bin/kubectl
 

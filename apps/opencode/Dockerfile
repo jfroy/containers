@@ -21,7 +21,7 @@ ARG TALOSCTL_VERSION
 ARG TASK_VERSION
 ARG YQ_VERSION
 
-RUN apk add --no-cache ca-certificates python3
+RUN apk add --no-cache --upgrade ca-certificates python3
 
 COPY scripts/install-tools.py /install-tools.py
 
@@ -33,7 +33,7 @@ FROM docker.io/library/alpine:3.24
 # libgcc, and it shells out to ripgrep for search. The rest is what the flatops
 # workflow needs alongside the pinned tools. opencode does not publish a v2
 # image during the beta, so this starts from Alpine rather than deriving.
-RUN apk add --no-cache \
+RUN apk add --no-cache --upgrade \
         bash \
         ca-certificates \
         curl \
