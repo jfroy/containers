@@ -76,7 +76,7 @@ variable "TASK_VERSION" {
 
 variable "YQ_VERSION" {
   // renovate: datasource=github-releases depName=mikefarah/yq
-  default = "v4.54.2"
+  default = "v4.54.3"
 }
 
 variable "SOURCE" {
