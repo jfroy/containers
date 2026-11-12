@@ -26,7 +26,7 @@ variable "FLUX_VERSION" {
 
 variable "GH_VERSION" {
   // renovate: datasource=github-releases depName=cli/cli
-  default = "v2.103.3"
+  default = "v2.104.0"
 }
 
 variable "HELM_VERSION" {
