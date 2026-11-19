@@ -16,7 +16,7 @@ variable "AGE_VERSION" {
 
 variable "FLATE_VERSION" {
   // renovate: datasource=github-releases depName=home-operations/flate
-  default = "v0.7.3"
+  default = "v0.8.0"
 }
 
 variable "FLUX_VERSION" {
